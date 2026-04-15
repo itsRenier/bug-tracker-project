@@ -1,0 +1,31 @@
+/* Base Application Styling */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Issue Card Styling */
+.issue-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-left: 4px solid #6c757d; /* Default border */
+}
+
+.issue-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+}
+
+/* Status-based Card Borders */
+.status-open { border-left-color: #0d6efd; }
+.status-resolved { border-left-color: #198754; }
+.status-overdue { border-left-color: #dc3545; }
+
+/* Priority Badges */
+.badge-priority-high { background-color: #dc3545; color: white; }
+.badge-priority-medium { background-color: #ffc107; color: black; }
+.badge-priority-low { background-color: #0dcaf0; color: black; }
+
+/* Admin/Nav Styling */
+.navbar-brand {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
