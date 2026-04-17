@@ -1,30 +1,94 @@
-/* Base Application Styling */
+/* =============================================================
+   styles.css — Custom Styles for BugTracker
+   =============================================================
+   Bootstrap handles most of the layout and base styling.
+   This file only adds the things Bootstrap doesn't provide:
+     • Left-border colours based on issue status
+     • Coloured priority badges
+     • A hover animation on the cards
+
+   HOW CSS CLASSES WORK WITH OUR JAVASCRIPT:
+   app.js dynamically adds class names to cards based on data.
+   For example, an issue with status='open' gets the class
+   'status-open', which this file styles with a blue left border.
+   Similarly, priority='high' gets 'badge-priority-high' → red badge.
+   ============================================================= */
+
+
+/* -------------------------------------------------------------
+   BASE / BODY
+   Sets the font for the whole application.
+   Bootstrap's default font is fine, but Segoe UI looks cleaner
+   on Windows, and the stack falls back gracefully on other OSes.
+------------------------------------------------------------- */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Issue Card Styling */
+
+/* -------------------------------------------------------------
+   ISSUE CARD — Base Styles
+   Applied to every card via the 'issue-card' class.
+
+   'transition' creates a smooth animation when CSS properties
+   change (e.g. on hover). We animate 'transform' and 'box-shadow'
+   over 0.2 seconds using the 'ease' timing curve (starts fast,
+   slows down at the end).
+
+   The left border gives a quick visual cue of status at a glance.
+   The default colour is grey (#6c757d) — overridden below per status.
+------------------------------------------------------------- */
 .issue-card {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    border-left: 4px solid #6c757d; /* Default border */
+    border-left: 4px solid #6c757d; /* default grey border */
 }
 
+/* When the user hovers over a card:
+   - Move it 2px upward (translateY with a negative value = move up)
+   - Increase its shadow to make it look "lifted"
+   The transition above makes this happen smoothly. */
 .issue-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
 }
 
-/* Status-based Card Borders */
-.status-open { border-left-color: #0d6efd; }
-.status-resolved { border-left-color: #198754; }
-.status-overdue { border-left-color: #dc3545; }
 
-/* Priority Badges */
-.badge-priority-high { background-color: #dc3545; color: white; }
-.badge-priority-medium { background-color: #ffc107; color: black; }
-.badge-priority-low { background-color: #0dcaf0; color: black; }
+/* -------------------------------------------------------------
+   STATUS-BASED LEFT BORDER COLOURS
+   These classes are added by app.js based on issue.status.
+   They override the default grey border with a status colour.
 
-/* Admin/Nav Styling */
+   Blue  = Open     (something still needs to be fixed)
+   Green = Resolved (the bug has been fixed)
+   Red   = Overdue  (the deadline has passed and it's not fixed)
+------------------------------------------------------------- */
+.status-open     { border-left-color: #0d6efd; } /* Bootstrap blue   */
+.status-resolved { border-left-color: #198754; } /* Bootstrap green  */
+.status-overdue  { border-left-color: #dc3545; } /* Bootstrap red    */
+
+
+/* -------------------------------------------------------------
+   PRIORITY BADGE COLOURS
+   These classes are added by app.js based on issue.priority.
+   They style the small badge in the top-left of each card.
+
+   Red    = High priority   (urgent, needs immediate attention)
+   Yellow = Medium priority (important but not critical)
+   Cyan   = Low priority    (minor issue, can wait)
+
+   Note: Yellow badges use black text (color: black) because
+   white text on yellow is hard to read (low contrast ratio).
+------------------------------------------------------------- */
+.badge-priority-high   { background-color: #dc3545; color: white; } /* red    */
+.badge-priority-medium { background-color: #ffc107; color: black; } /* yellow */
+.badge-priority-low    { background-color: #0dcaf0; color: black; } /* cyan   */
+
+
+/* -------------------------------------------------------------
+   NAVBAR BRAND
+   Makes the app name in the top-left slightly bolder and
+   adds a little spacing between letters for readability.
+------------------------------------------------------------- */
 .navbar-brand {
     font-weight: 600;
     letter-spacing: 0.5px;
