@@ -1,13 +1,6 @@
-// Utility to get an array from localStorage or return empty array
-function getLocalStorageArray(key) {
-  const data = localStorage.getItem(key);
-  return data ? JSON.parse(data) : [];
-}
-
-// Utility to save array to localStorage
-function setLocalStorageArray(key, array) {
-  localStorage.setItem(key, JSON.stringify(array));
-}
+// =============================================================
+// issue-management.js — Member 2 (Create, Edit & Details)
+// =============================================================
 
 // Load people and projects for select dropdowns
 function populateSelectOptions(selectId, array, valueKey, textKey) {
@@ -17,7 +10,8 @@ function populateSelectOptions(selectId, array, valueKey, textKey) {
   array.forEach((item) => {
     const option = document.createElement('option');
     option.value = item[valueKey];
-    option.textContent = item[textKey];
+    // FIXED: Appends surname if it exists (Issue 7)
+    option.textContent = item.surname ? `${item[textKey]} ${item.surname}` : item[textKey];
     select.appendChild(option);
   });
 }
@@ -28,16 +22,11 @@ function validateForm(form) {
   return form.checkValidity();
 }
 
-// Generate unique ID (simple)
-function generateId() {
-  return Date.now().toString();
-}
-
 // Save new or update existing issue
 function saveIssue(data, isEdit = false) {
-  let issues = getLocalStorageArray('issues');
+  // FIXED: Replaced custom local storage calls with getData(DB_ISSUES)
+  let issues = getData(DB_ISSUES); 
   if (isEdit) {
-    // Update existing issue by id
     const index = issues.findIndex((i) => i.id === data.id);
     if (index !== -1) {
       issues[index] = data;
@@ -45,15 +34,14 @@ function saveIssue(data, isEdit = false) {
       issues.push(data);
     }
   } else {
-    // Add new
     issues.push(data);
   }
-  setLocalStorageArray('issues', issues);
+  saveData(DB_ISSUES, issues); // FIXED: Used shared saveData function
 }
 
 // Load issue data into form for editing
 function loadIssueIntoForm(issueId) {
-  const issues = getLocalStorageArray('issues');
+  const issues = getData(DB_ISSUES);
   const issue = issues.find((i) => i.id === issueId);
   if (!issue) return null;
 
@@ -75,9 +63,9 @@ function loadIssueIntoForm(issueId) {
 
 // Render issue detail page
 function renderIssueDetails(issueId) {
-  const issues = getLocalStorageArray('issues');
-  const people = getLocalStorageArray('people');
-  const projects = getLocalStorageArray('projects');
+  const issues = getData(DB_ISSUES);
+  const people = getData(DB_PEOPLE);
+  const projects = getData(DB_PROJECTS);
 
   const issue = issues.find(i => i.id === issueId);
   if (!issue) {
@@ -92,6 +80,7 @@ function renderIssueDetails(issueId) {
   const container = document.getElementById('issueDetails');
   container.innerHTML = `
     <h4>${issue.summary}</h4>
+    <hr>
     <p><strong>Description:</strong> ${issue.description}</p>
     <p><strong>Identified By:</strong> ${personReporter ? personReporter.name + ' ' + personReporter.surname : 'Unknown'}</p>
     <p><strong>Date Identified:</strong> ${issue.dateIdentified}</p>
@@ -113,8 +102,8 @@ function renderIssueDetails(issueId) {
 
 // On page load logic for create/edit form
 function initializeForm() {
-  const people = getLocalStorageArray('people');
-  const projects = getLocalStorageArray('projects');
+  const people = getData(DB_PEOPLE);
+  const projects = getData(DB_PROJECTS);
 
   // Populate selects
   populateSelectOptions('identifiedBy', people, 'id', 'name');
@@ -126,6 +115,10 @@ function initializeForm() {
   const issueId = params.get('id');
 
   if (issueId) {
+    // FIXED: Change page heading dynamically so user knows they are editing (Issue 10)
+    const heading = document.querySelector('h2');
+    if(heading) heading.textContent = 'Edit Issue';
+
     // Editing mode - load data into form
     const issue = loadIssueIntoForm(issueId);
     if (!issue) {
@@ -145,7 +138,7 @@ function initializeForm() {
     }
 
     const formData = {
-      id: issueId || generateId(),
+      id: issueId || generateId(), // FIXED: Use shared generateId()
       summary: document.getElementById('summary').value.trim(),
       description: document.getElementById('description').value.trim(),
       identifiedBy: document.getElementById('identifiedBy').value,

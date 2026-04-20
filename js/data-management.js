@@ -1,44 +1,30 @@
-console.log("Data management loaded");
-function getPeople() {
-  return JSON.parse(localStorage.getItem('people')) || [];
-}
-
-function savePeople(people) {
-  localStorage.setItem('people', JSON.stringify(people));
-}
-
-function getProjects() {
-  return JSON.parse(localStorage.getItem('projects')) || [];
-}
-
-function saveProjects(projects) {
-  localStorage.setItem('projects', JSON.stringify(projects));
-}
+// =============================================================
+// data-management.js — Member 3 (People & Projects)
+// =============================================================
 
 function displayPeople() {
-  let people = getPeople();
+  let people = getData(DB_PEOPLE);
   let container = document.getElementById("peopleList");
-
   if (!container) return;
-
-  container.innerHTML = "";
-
+  
+  let htmlContent = ""; // Build string
   people.forEach(p => {
-    container.innerHTML += `
-      <div class="card p-2 mb-2">
-        ${p.name} ${p.surname} - ${p.email}
-      </div>
-    `;
+    htmlContent += `
+      <div class="card p-3 mb-2 shadow-sm border-start border-4 border-secondary">
+        <div class="fw-bold">${p.name} ${p.surname}</div>
+        <div class="text-muted small">${p.email} | @${p.username}</div>
+      </div>`;
   });
+  container.innerHTML = htmlContent; // Inject once
 }
 
 document.getElementById("personForm")?.addEventListener("submit", function(e) {
   e.preventDefault();
 
-  let people = getPeople();
+  let people = getData(DB_PEOPLE);
 
   let newPerson = {
-    id: generateId(),
+    id: generateId(), // FIXED: Using Member 1's generateId function
     name: document.getElementById("name").value,
     surname: document.getElementById("surname").value,
     email: document.getElementById("email").value,
@@ -46,87 +32,47 @@ document.getElementById("personForm")?.addEventListener("submit", function(e) {
   };
 
   people.push(newPerson);
-  savePeople(people);
+  saveData(DB_PEOPLE, people); // FIXED: Using shared saveData
 
   displayPeople();
+  e.target.reset(); // Clears form after submit
 });
 
-displayPeople();
-
 function displayProjects() {
-  let projects = getProjects();
+  let projects = getData(DB_PROJECTS);
   let container = document.getElementById("projectList");
-
   if (!container) return;
-
-  container.innerHTML = "";
-
+  
+  let htmlContent = ""; // Build string
   projects.forEach(p => {
-    container.innerHTML += `
-      <div class="card p-3 mb-2">
-        ${p.name}
-      </div>
-    `;
+    htmlContent += `
+      <div class="card p-3 mb-2 shadow-sm border-start border-4 border-secondary">
+        <div class="fw-bold">${p.name}</div>
+        <div class="text-muted small">${p.description || 'No description provided'}</div>
+      </div>`;
   });
+  container.innerHTML = htmlContent; // Inject once
 }
 
 document.getElementById("projectForm")?.addEventListener("submit", function(e) {
   e.preventDefault();
 
-  let projects = getProjects();
+  let projects = getData(DB_PROJECTS);
 
   let newProject = {
-    id: Date.now().toString(),
-    name: document.getElementById("projectName").value
+    id: generateId(),
+    name: document.getElementById("projectName").value,
+    // FIXED: Capturing the project description from the form (Issue 5)
+    description: document.getElementById("projectDescription").value 
   };
 
   projects.push(newProject);
-  saveProjects(projects);
+  saveData(DB_PROJECTS, projects);
 
   displayProjects();
+  e.target.reset(); // Clears form after submit
 });
 
-displayProjects();
-
-function seedData() {
-  if (getPeople().length === 0) {
-    savePeople([
-      { id: "1", name: "Alice", surname: "Brown", email: "alice@mail.com", username: "alice" },
-      { id: "2", name: "Bob", surname: "Smith", email: "bob@mail.com", username: "bob" }
-    ]);
-  }
-
-  if (getProjects().length === 0) {
-    saveProjects([
-      { id: "1", name: "Website Redesign" },
-      { id: "2", name: "Bug Tracker System" }
-    ]);
-  }
-}
-
-seedData();
-
-container.innerHTML += `
-  <div class="card p-3 mb-2">
-    <strong>${p.name} ${p.surname}</strong><br>
-    <small>Email: ${p.email}</small><br>
-    <small>Username: @${p.username}</small>
-  </div>
-`;
-
-container.innerHTML += `
-  <div class="card p-3 mb-2">
-    <strong>${p.name}</strong>
-  </div>
-`;
-
-function checkOverdue(issue) {
-  let today = new Date();
-  let target = new Date(issue.targetResolution);
-
-  if (issue.status !== "resolved" && today > target) {
-    return "overdue";
-  }
-
-  return issue.status;
-}
+// Initialise page functions
+if (document.getElementById("peopleList")) displayPeople();
+if (document.getElementById("projectList")) displayProjects();

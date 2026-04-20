@@ -87,118 +87,78 @@ function initializeDatabase() {
 //   filterStatus — the status to filter by ('open', 'resolved',
 //                  'overdue'). Defaults to 'all' (show everything)
 //                  if no argument is passed in.
+// =============================================================
+// REPLACEMENT FOR renderDashboard() in app.js
+// =============================================================
 function renderDashboard(filterStatus = 'all') {
-
-    // Get a reference to the div that will hold all the cards.
     const container = document.getElementById('issuesContainer');
-
-    // Load every issue from localStorage into a JavaScript array.
     const allIssues = getData(DB_ISSUES);
-
-    // Clear the container so we start fresh every time.
-    // (This removes the "Loading issues..." placeholder text,
-    //  and also clears old cards when the filter changes.)
+    const people = getData(DB_PEOPLE); // Fetch people to map IDs to Names
+    
     container.innerHTML = '';
 
-    // --- FILTER THE ISSUES ---
-    // If the user wants all issues, use the full array.
-    // Otherwise, use .filter() to keep only matching issues.
-    // .filter() loops through the array and returns a NEW array
-    // containing only items where the condition returns true.
-    let issuesToDisplay;
+    let issuesToDisplay = filterStatus === 'all' ? allIssues : allIssues.filter(issue => issue.status === filterStatus);
 
-    if (filterStatus === 'all') {
-        issuesToDisplay = allIssues;
-    } else {
-        issuesToDisplay = allIssues.filter(function (issue) {
-            return issue.status === filterStatus;
-        });
-    }
-
-    // --- HANDLE EMPTY RESULTS ---
-    // If there are no issues to show, display a friendly message.
-    // 'return' exits the function early — there is nothing more to do.
     if (issuesToDisplay.length === 0) {
-        container.innerHTML = `
-            <div class="col-12 text-center text-muted py-5">
-                <p>No issues found for this filter.</p>
-            </div>`;
+        container.innerHTML = `<div class="col-12 text-center text-muted py-5"><p>No issues found for this filter.</p></div>`;
         return;
     }
 
-    // --- BUILD A CARD FOR EACH ISSUE ---
-    // .forEach() runs the function once for every item in the array.
-    // 'issue' refers to the current item in each loop iteration.
+    // FIX: Create a string to hold all HTML instead of updating the DOM inside the loop
+    let htmlContent = ''; 
+
     issuesToDisplay.forEach(function (issue) {
-
-        // Capitalise the first letter for display.
-        // e.g. 'open' → 'Open',  'high' → 'High'
-        // .charAt(0).toUpperCase() gets the first letter and uppercases it.
-        // .slice(1) gets everything from the second character onwards.
-        const displayStatus   = issue.status.charAt(0).toUpperCase()   + issue.status.slice(1);
+        const displayStatus = issue.status.charAt(0).toUpperCase() + issue.status.slice(1);
         const displayPriority = issue.priority.charAt(0).toUpperCase() + issue.priority.slice(1);
-
-        // Build the HTML for one Bootstrap card.
-        // We use a TEMPLATE LITERAL (backtick string) so we can
-        // write multi-line HTML and insert JavaScript values with ${...}.
-        const cardHTML = `
+        
+        // FIX: Data Model Consistency - map the assignedTo ID to the actual person's name
+        const personAssigned = people.find(p => p.id === issue.assignedTo);
+        const assigneeName = personAssigned ? `${personAssigned.name} ${personAssigned.surname}` : 'Unassigned';
+        
+        // FIX: Use escapeHTML to prevent XSS vulnerabilities
+        htmlContent += `
             <div class="col-md-6 col-lg-4 mb-4">
                 <div class="card issue-card status-${issue.status} h-100 shadow-sm">
-
                     <div class="card-body pb-2">
-
-                        <!-- Top row: coloured priority badge + target date -->
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <span class="badge badge-priority-${issue.priority} px-2 py-1">
-                                ${displayPriority} Priority
-                            </span>
-                            <small class="text-muted fw-bold">${issue.targetDate}</small>
+                            <span class="badge badge-priority-${issue.priority} px-2 py-1">${displayPriority} Priority</span>
+                            <small class="text-muted fw-bold">${escapeHTML(issue.targetResolution || 'No date')}</small>
                         </div>
-
-                        <!-- Issue title -->
-                        <h5 class="card-title fw-bold text-dark mb-2">${issue.summary}</h5>
-
-                        <!-- Short description (truncated if too long) -->
-                        <p class="card-text text-secondary small text-truncate mb-3"
-                           style="max-height: 40px;">
-                            ${issue.description}
-                        </p>
-
-                        <!-- Info box showing assignee and status -->
+                        <h5 class="card-title fw-bold text-dark mb-2">${escapeHTML(issue.summary)}</h5>
+                        <p class="card-text text-secondary small text-truncate mb-3" style="max-height: 40px;">${escapeHTML(issue.description)}</p>
                         <div class="bg-light rounded p-2 mb-2 border">
                             <div class="d-flex justify-content-between small mb-1">
                                 <span class="text-muted">Assignee:</span>
-                                <span class="fw-semibold">${issue.assignee}</span>
+                                <span class="fw-semibold">${escapeHTML(assigneeName)}</span>
                             </div>
                             <div class="d-flex justify-content-between small">
                                 <span class="text-muted">Status:</span>
-                                <!-- getStatusColor() returns a Bootstrap colour class name -->
-                                <span class="fw-semibold text-${getStatusColor(issue.status)}">
-                                    ${displayStatus}
-                                </span>
+                                <span class="fw-semibold text-${getStatusColor(issue.status)}">${displayStatus}</span>
                             </div>
                         </div>
-
                     </div>
-
-                    <!-- Card footer: link to the full detail page.
-                         We pass the issue's unique ID in the URL (?id=...)
-                         so the detail page knows which issue to load. -->
                     <div class="card-footer bg-white border-top-0 pt-0 pb-3">
-                        <a href="pages/issue-detail.html?id=${issue.id}"
-                           class="btn btn-sm btn-outline-secondary w-100 fw-bold">
-                            View Details
-                        </a>
+                        <a href="pages/issue-detail.html?id=${issue.id}" class="btn btn-sm btn-outline-secondary w-100 fw-bold">View Details</a>
                     </div>
-
                 </div>
-            </div>
-        `;
-
-        // Append this card's HTML to the container div.
-        // += means "add to what's already there" so cards stack up.
-        container.innerHTML += cardHTML;
+            </div>`;
     });
+    
+    // Inject all the HTML at once (Massive performance boost)
+    container.innerHTML = htmlContent;
+}
+
+// =============================================================
+// ADD THIS SECURITY HELPER ANYWHERE IN app.js
+// =============================================================
+function escapeHTML(str) {
+    if (!str) return '';
+    return str.toString()
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 }
 
 
@@ -298,118 +258,44 @@ function generateId() {
 //   The data covers all three statuses, all three priorities,
 //   four different assignees, and four different projects —
 //   meeting the project brief's variation requirements.
+// =============================================================
+// REPLACEMENT FOR seedDummyData() in app.js
+// =============================================================
 function seedDummyData() {
+    const people = getData(DB_PEOPLE);
+    const projects = getData(DB_PROJECTS);
+    const issues = getData(DB_ISSUES);
 
-    const existingIssues = getData(DB_ISSUES);
-
-    // Exit immediately if issues already exist — do not overwrite.
-    if (existingIssues.length > 0) {
-        return;
+    // 1. Seed People
+    if (people.length === 0) {
+        saveData(DB_PEOPLE, [
+            { id: "p1", name: "Alice", surname: "Brown", email: "alice@mail.com", username: "alice" },
+            { id: "p2", name: "Bob", surname: "Smith", email: "bob@mail.com", username: "bob" }
+        ]);
     }
 
-    const dummyIssues = [
-        {
-            id: generateId(),
-            summary: 'Login button unresponsive on mobile Safari',
-            description: 'When users try to tap the login button on iOS 15, nothing happens. No console errors are thrown.',
-            status: 'open',
-            priority: 'high',
-            assignee: 'Sarah Jenkins',
-            targetDate: '2026-04-18',
-            project: 'Mobile App'
-        },
-        {
-            id: generateId(),
-            summary: 'Database timeout during heavy load',
-            description: 'The reporting queries are timing out when more than 50 users generate PDF reports simultaneously.',
-            status: 'overdue',
-            priority: 'high',
-            assignee: 'Michael Chang',
-            targetDate: '2026-04-10',
-            project: 'Backend API'
-        },
-        {
-            id: generateId(),
-            summary: 'Typo in welcome email template',
-            description: 'The word "receive" is spelled as "recieve" in the automated welcome email sent to new signups.',
-            status: 'resolved',
-            priority: 'low',
-            assignee: 'Emma Watson',
-            targetDate: '2026-04-12',
-            project: 'Marketing Site'
-        },
-        {
-            id: generateId(),
-            summary: 'Profile picture upload fails for PNGs > 5MB',
-            description: 'The system rejects PNG files larger than 5MB but the UI says the limit is 10MB.',
-            status: 'open',
-            priority: 'medium',
-            assignee: 'David Osei',
-            targetDate: '2026-04-20',
-            project: 'Web Dashboard'
-        },
-        {
-            id: generateId(),
-            summary: 'Dark mode toggle resets on page refresh',
-            description: 'User preference for dark mode is not being saved to localStorage, causing it to revert to light mode on refresh.',
-            status: 'open',
-            priority: 'medium',
-            assignee: 'Sarah Jenkins',
-            targetDate: '2026-04-19',
-            project: 'Web Dashboard'
-        },
-        {
-            id: generateId(),
-            summary: 'Payment gateway API keys exposed in logs',
-            description: 'CRITICAL: Stripe API test keys are being printed to the console log during checkout.',
-            status: 'resolved',
-            priority: 'high',
-            assignee: 'Michael Chang',
-            targetDate: '2026-04-14',
-            project: 'Backend API'
-        },
-        {
-            id: generateId(),
-            summary: 'Footer links overlap on small screens',
-            description: 'The Terms of Service and Privacy Policy links overlap each other when viewport width is below 320px.',
-            status: 'overdue',
-            priority: 'low',
-            assignee: 'Emma Watson',
-            targetDate: '2026-04-11',
-            project: 'Marketing Site'
-        },
-        {
-            id: generateId(),
-            summary: 'Export to CSV returns empty file',
-            description: 'Clicking the export button downloads a CSV file, but it contains only headers and no data rows.',
-            status: 'open',
-            priority: 'medium',
-            assignee: 'David Osei',
-            targetDate: '2026-04-22',
-            project: 'Web Dashboard'
-        },
-        {
-            id: generateId(),
-            summary: 'Push notifications not delivering to Android',
-            description: 'FCM tokens are failing validation on the backend resulting in failed delivery to Android clients.',
-            status: 'open',
-            priority: 'high',
-            assignee: 'Michael Chang',
-            targetDate: '2026-04-17',
-            project: 'Mobile App'
-        },
-        {
-            id: generateId(),
-            summary: 'Missing padding on pricing cards',
-            description: 'The new pricing tier cards are lacking internal padding, making text touch the borders.',
-            status: 'resolved',
-            priority: 'low',
-            assignee: 'Emma Watson',
-            targetDate: '2026-04-15',
-            project: 'Marketing Site'
-        }
-    ];
+    // 2. Seed Projects
+    if (projects.length === 0) {
+        saveData(DB_PROJECTS, [
+            { id: "pr1", name: "Website Redesign", description: "Overhaul of the main corporate site" },
+            { id: "pr2", name: "Bug Tracker System", description: "Internal tool for software engineering team" }
+        ]);
+    }
 
-    saveData(DB_ISSUES, dummyIssues);
-    console.log('Seeded 10 dummy issues for testing.');
+    // 3. Seed Issues (Now using actual foreign key IDs linking to the people/projects above)
+    if (issues.length === 0) {
+        saveData(DB_ISSUES, [
+            { 
+                id: generateId(), 
+                summary: 'Login button unresponsive', 
+                description: 'No console errors are thrown when clicking the main login button.', 
+                status: 'open', 
+                priority: 'high', 
+                identifiedBy: 'p1', // Links to Alice
+                assignedTo: 'p2',   // Links to Bob
+                targetResolution: '2026-04-18', 
+                project: 'pr1'      // Links to Website Redesign
+            }
+        ]);
+    }
 }
