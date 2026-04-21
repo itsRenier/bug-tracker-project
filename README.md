@@ -100,12 +100,13 @@ From here either one of 3 options can commence:
          Issues can be modified and any of the information can be updated.
 
 3) View People/Projects-
-   There is a list of all the people that are working on a project, as well as a list of all the projects that can be viewed under 
-   the People and Projects tabs respectively. When the user is either on the Person or Projects tabs, they can:
+   There is a list of all the people that are working on a project, as well as a list of all the projects 
+   that can be viewed under the People and Projects tabs respectively. When the user is either on the 
+   Person or Projects tabs, they can:
       a. Return to the dashboard
       b. Add New Entries-
-         Enter all the required information for a new person (name, surname, email, username). Or enter all the required information 
-	     for a new project (name, description).
+         Enter all the required information for a new person (name, surname, email, username). Or enter all 
+	     the required information for a new project (name, description).
 
 • When either one of the 3 options is complete, or backed out from, the user will be back on the Dashboard.
 
