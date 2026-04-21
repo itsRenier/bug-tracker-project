@@ -59,8 +59,8 @@ multiple members as well as project management, for multiple projects.
                             +------------------+
                             |       Login      |
                             +------------------+
-	                                	 |
-                                		 v
+	                                 |
+                                	 v
                             +------------------+
                             |  View Dashboard  |
                             +------------------+
