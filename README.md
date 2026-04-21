@@ -1,29 +1,29 @@
 #WPR281 Group: FPretoriaPM - Bug Tracking System Project
 This project aims to create a website that can be used to log issues that typically occur in assignments, track their status, priority level and progress, and allow their details to be edited. It will also allow for member management for projects with multiple members as well as project management, for multiple projects.
-
-
-##Features:
-•	Issue Management
-  o	Create new issues with 11 required fields
-  o	Edit/update existing issues
-  o	View all issues in a dashboard
-  o	View single issue details 
-•	People Management
-  o	Add and manage people (ID, name, surname, email, username)
-  o	People can be assigned to issues
-•	Project Management
-  o	Add and manage projects (ID, name, description)
+<br>
+<br>
+##Features:<br>
+•	Issue Management <br>
+  o	Create new issues with 11 required fields<br>
+  o	Edit/update existing issues<br>
+  o	View all issues in a dashboard<br>
+  o	View single issue details <br>
+•	People Management<br>
+  o	Add and manage people (ID, name, surname, email, username)<br>
+  o	People can be assigned to issues<br>
+•	Project Management<br>
+  o	Add and manage projects (ID, na<br>me, description)<br>
   o	Issues are linked to projects
-•	Dashboard
-  o	Filter issues by status (open, resolved, overdue)
-  o	Priority badges and status borders for quick visual cues
-•	Data Persistence
-  o	All entities (issues, people, projects) stored in localStorage
-  o	Data persists across browser refresh
-•	Responsive Design
+•	Dashboard<br>
+  o	Filter issues by status (open, resolved, overdue)<br>
+  o	Priority badges and status borders for quick visual cues<br>
+•	Data Persistence<br>
+  o	All entities (issues, people, projects) stored in localStorage<br>
+  o	Data persists across browser refresh<br>
+•	Responsive Design<br>
   o	Built with Bootstrap 5 for mobile, tablet, and desktop compatibility
-
-
+<br>
+<br>
 ##File Structure
 /login.html: Login page
 /index.html: Dashboard
