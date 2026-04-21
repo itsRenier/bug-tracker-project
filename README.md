@@ -1,55 +1,56 @@
-#WPR281 Group: FPretoriaPM - Bug Tracking System Project
+#WPR281 Group: FPretoriaPM - Bug Tracking System Project<br>
+<br>
 This project aims to create a website that can be used to log issues that typically occur in assignments, track their status, priority level and progress, and allow their details to be edited. It will also allow for member management for projects with multiple members as well as project management, for multiple projects.
 <br>
 <br>
-##Features:<br>
-•	Issue Management <br>
-  o	Create new issues with 11 required fields<br>
-  o	Edit/update existing issues<br>
-  o	View all issues in a dashboard<br>
+##Features: <br>
+• Issue Management <br>
+  o	Create new issues with 11 required fields <br>
+  o	Edit/update existing issues <br>
+  o	View all issues in a dashboard <br>
   o	View single issue details <br>
-•	People Management<br>
-  o	Add and manage people (ID, name, surname, email, username)<br>
-  o	People can be assigned to issues<br>
-•	Project Management<br>
-  o	Add and manage projects (ID, na<br>me, description)<br>
-  o	Issues are linked to projects
-•	Dashboard<br>
-  o	Filter issues by status (open, resolved, overdue)<br>
-  o	Priority badges and status borders for quick visual cues<br>
-•	Data Persistence<br>
-  o	All entities (issues, people, projects) stored in localStorage<br>
-  o	Data persists across browser refresh<br>
-•	Responsive Design<br>
+• People Management <br>
+  o	Add and manage people (ID, name, surname, email, username) <br>
+  o	People can be assigned to issues <br>
+• Project Management <br>
+  o	Add and manage projects (ID, name, description) <br>
+  o	Issues are linked to projects <br>
+• Dashboard <br>
+  o	Filter issues by status (open, resolved, overdue) <br>
+  o	Priority badges and status borders for quick visual cues <br>
+• Data Persistence <br>
+  o	All entities (issues, people, projects) stored in localStorage <br>
+  o	Data persists across browser refresh <br>
+• Responsive Design <br>
   o	Built with Bootstrap 5 for mobile, tablet, and desktop compatibility
 <br>
 <br>
-##File Structure
-/login.html: Login page
-/index.html: Dashboard
-/pages/create-issue.html: Issue creation and editing
-/pages/issue-detail.html: Issue detail view
-/pages/people-management.html: Manage people
-/pages/project-management.html: Manage projects
-/css/styles.css: Custom styles
-/js/app.js: Shared utilities + dashboard logic
-/js/data-management.js: People and project management
+##File Structure <br>
+/login.html: Login page <br>
+/index.html: Dashboard <br>
+/pages/create-issue.html: Issue creation and editing <br>
+/pages/issue-detail.html: Issue detail view <br>
+/pages/people-management.html: Manage people <br>
+/pages/project-management.html: Manage projects <br>
+/css/styles.css: Custom styles <br>
+/js/app.js: Shared utilities + dashboard logic <br>
+/js/data-management.js: People and project management <br>
 /js/issue-management.js: Issue creation, editing, and detail rendering
-
-
-##Architecture
-•	HTML pages provide UI.
-•	CSS (Bootstrap + custom styles) provides layout and visual cues.
-•	JavaScript modules handle logic and persistence.
-•	localStorage stores issues, people, and projects.
-
-
-##Data Schema:
-•	Issue: {id, summary, description, identifiedBy, dateIdentified, project, status, priority, assignedTo, targetResolution, actualResolution, resolutionSummary}
-•	Person: {id, name, surname, email, username}
-•	Project: {id, name, description}
-
-
+<br>
+<br>
+##Architecture <br>
+•	HTML pages provide UI. <br>
+•	CSS (Bootstrap + custom styles) provides layout and visual cues. <br>
+•	JavaScript modules handle logic and persistence. <br>
+•	localStorage stores issues, people, and projects. <br>
+<br>
+<br>
+##Data Schema: <br>
+•	Issue: {id, summary, description, identifiedBy, dateIdentified, project, status, priority, assignedTo, targetResolution, actualResolution, resolutionSummary} <br>
+•	Person: {id, name, surname, email, username} <br>
+•	Project: {id, name, description} <br>
+<br>
+<br>
 ##Use Case
                             +------------------+
                             |       Login      |
