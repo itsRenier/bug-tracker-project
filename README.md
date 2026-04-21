@@ -49,7 +49,8 @@ multiple members as well as project management, for multiple projects.
 
 
 ##Data Schema:
-• Issue: {id, summary, description, identifiedBy, dateIdentified, project, status, priority, assignedTo, targetResolution, actualResolution, resolutionSummary}
+• Issue: {id, summary, description, identifiedBy, dateIdentified, project, status, priority, assignedTo, targetResolution, 
+  actualResolution, resolutionSummary}
 • Person: {id, name, surname, email, username
 • Project: {id, name, description}
 
@@ -79,14 +80,16 @@ Use case:
 The first page will be the login page where the user will have to enter the right username and password.
 
 • View Dashboard-
-All issues appear in the dashboard with status and priority badges. A filter can also be applied here to only show certain statuses (Open, Resolved, Overdue). 
+All issues appear in the dashboard with status and priority badges. A filter can also be applied here to only show certain statuses 
+(Open, Resolved, Overdue). 
 From here either one of 3 options can commence:
 
 1) Create Issue-
    The user is taken to the “Create New Issue” screen where the user can:
       a. Return to the dashboard
       b. Enter Issue Details-
-         Enter all the required information for the issue (summary, description, identifiedBy, dateIdentified, project, status, priority, assignedTo, targetResolution, actualResolution, resolutionSummary).
+         Enter all the required information for the issue (summary, description, identifiedBy, dateIdentified, project, status, 
+	     priority, assignedTo, targetResolution, actualResolution, resolutionSummary).
 
 2) View Issue Details-
    Displays all the information for a certain issue. The user can then either:
@@ -95,16 +98,19 @@ From here either one of 3 options can commence:
          Issues can be modified and any of the information can be updated.
 
 3) View People/Projects-
-   There is a list of all the people that are working on a project, as well as a list of all the projects that can be viewed under the People and Projects tabs respectively. When the user is either on the Person or           Projects tabs, they can:
+   There is a list of all the people that are working on a project, as well as a list of all the projects that can be viewed under 
+   the People and Projects tabs respectively. When the user is either on the Person or Projects tabs, they can:
       a. Return to the dashboard
       b. Add New Entries-
-         Enter all the required information for a new person (name, surname, email, username). Or enter all the required information for a new project (name, description).
+         Enter all the required information for a new person (name, surname, email, username). Or enter all the required information 
+	     for a new project (name, description).
 
 • When either one of the 3 options is complete, or backed out from, the user will be back on the Dashboard.
 
 
 ##Requirements and Installation
-The only requirements are a stable internet connection and a computing device with a web browser. The system is a fully online website that can be used across all devices. Therefore, there is also no installation required.
+The only requirements are a stable internet connection and a computing device with a web browser. The system is a fully online website 
+that can be used across all devices. Therefore, there is also no installation required.
 
 
 ##Project Team Acknowledgement
