@@ -1,6 +1,5 @@
 #WPR281 Group: FPretoriaPM - Bug Tracking System Project <br>
 <br>
-<br>
 This project aims to create a website that can be used to log issues that typically occur in assignments, track their status, priority level and progress, and allow their details to be edited. It will also allow for member management for projects with multiple members as well as project management, for multiple projects. <br>
 <br>
 <br>
