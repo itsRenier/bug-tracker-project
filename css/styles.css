@@ -1,95 +1,255 @@
-/* =============================================================
-   styles.css — Custom Styles for BugTracker
-   =============================================================
-   Bootstrap handles most of the layout and base styling.
-   This file only adds the things Bootstrap doesn't provide:
-     • Left-border colours based on issue status
-     • Coloured priority badges
-     • A hover animation on the cards
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-   HOW CSS CLASSES WORK WITH OUR JAVASCRIPT:
-   app.js dynamically adds class names to cards based on data.
-   For example, an issue with status='open' gets the class
-   'status-open', which this file styles with a blue left border.
-   Similarly, priority='high' gets 'badge-priority-high' → red badge.
-   ============================================================= */
+:root {
+    --primary: #4f46e5;       /* Premium Indigo */
+    --primary-dark: #4338ca;  /* Darker Indigo for hover states */
+    --bg: #f8fafc;            /* Modern Slate off-white */
+    --surface: #ffffff;
+    --border: #e2e8f0;        /* Crisp Slate border */
+    --text: #334155;          /* Deep Slate text */
+    --muted: #64748b;         /* Muted Slate text */
+    --open: #3b82f6;          /* Crisp Blue */
+    --resolved: #10b981;      /* Emerald Green */
+    --overdue: #ef4444;       /* Vibrant Red */
+}
 
+* {
+    box-sizing: border-box;
+}
 
-/* -------------------------------------------------------------
-   BASE / BODY
-   Sets the font for the whole application.
-   Bootstrap's default font is fine, but Segoe UI looks cleaner
-   on Windows, and the stack falls back gracefully on other OSes.
-------------------------------------------------------------- */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    margin: 0;
 }
 
-
-/* -------------------------------------------------------------
-   ISSUE CARD — Base Styles
-   Applied to every card via the 'issue-card' class.
-
-   'transition' creates a smooth animation when CSS properties
-   change (e.g. on hover). We animate 'transform' and 'box-shadow'
-   over 0.2 seconds using the 'ease' timing curve (starts fast,
-   slows down at the end).
-
-   The left border gives a quick visual cue of status at a glance.
-   The default colour is grey (#6c757d) — overridden below per status.
-------------------------------------------------------------- */
-.issue-card {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    border-left: 4px solid #6c757d; /* default grey border */
+/* ── Navbar ── */
+.navbar {
+    background-color: #0f172a !important; /* Slate Dark */
+    border-bottom: 3px solid var(--primary);
+    padding: 0.75rem 1.5rem;
 }
 
-/* When the user hovers over a card:
-   - Move it 2px upward (translateY with a negative value = move up)
-   - Increase its shadow to make it look "lifted"
-   The transition above makes this happen smoothly. */
-.issue-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
-}
-
-
-/* -------------------------------------------------------------
-   STATUS-BASED LEFT BORDER COLOURS
-   These classes are added by app.js based on issue.status.
-   They override the default grey border with a status colour.
-
-   Blue  = Open     (something still needs to be fixed)
-   Green = Resolved (the bug has been fixed)
-   Red   = Overdue  (the deadline has passed and it's not fixed)
-------------------------------------------------------------- */
-.status-open     { border-left-color: #0d6efd; } /* Bootstrap blue   */
-.status-resolved { border-left-color: #198754; } /* Bootstrap green  */
-.status-overdue  { border-left-color: #dc3545; } /* Bootstrap red    */
-
-
-/* -------------------------------------------------------------
-   PRIORITY BADGE COLOURS
-   These classes are added by app.js based on issue.priority.
-   They style the small badge in the top-left of each card.
-
-   Red    = High priority   (urgent, needs immediate attention)
-   Yellow = Medium priority (important but not critical)
-   Cyan   = Low priority    (minor issue, can wait)
-
-   Note: Yellow badges use black text (color: black) because
-   white text on yellow is hard to read (low contrast ratio).
-------------------------------------------------------------- */
-.badge-priority-high   { background-color: #dc3545; color: white; } /* red    */
-.badge-priority-medium { background-color: #ffc107; color: black; } /* yellow */
-.badge-priority-low    { background-color: #0dcaf0; color: black; } /* cyan   */
-
-
-/* -------------------------------------------------------------
-   NAVBAR BRAND
-   Makes the app name in the top-left slightly bolder and
-   adds a little spacing between letters for readability.
-------------------------------------------------------------- */
 .navbar-brand {
+    font-weight: 700;
+    font-size: 1.25rem;
+    letter-spacing: -0.3px;
+    color: #ffffff !important;
+}
+
+.nav-link {
+    color: #cbd5e1 !important;
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 0.5rem 0.85rem !important;
+    border-radius: 6px;
+    transition: background 0.15s, color 0.15s;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff !important;
+}
+
+/* ── Buttons ── */
+.btn-primary {
+    background-color: var(--primary);
+    border-color: var(--primary);
     font-weight: 600;
+    font-size: 0.875rem;
+    border-radius: 8px;
+    padding: 0.45rem 1rem;
+    transition: background 0.2s, transform 0.15s;
+    box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.3);
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 8px -1px rgba(79, 70, 229, 0.4);
+}
+
+.btn-secondary {
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: 8px;
+}
+
+.btn-outline-secondary {
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+}
+
+.btn-warning {
+    font-size: 0.875rem;
+    font-weight: 600;
+    border-radius: 8px;
+}
+
+/* ── Form controls ── */
+.form-control,
+.form-select {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    background-color: var(--surface);
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15); /* Blue focus ring */
+    outline: none;
+}
+
+.form-label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
     letter-spacing: 0.5px;
+    margin-bottom: 0.3rem;
+}
+
+/* ── Issue cards ── */
+.card-issue {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 5px solid #94a3b8;
+    border-radius: 10px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    overflow: hidden;
+}
+
+.card-issue:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.card-issue.is-open    { border-left-color: var(--open); }
+.card-issue.is-resolved { border-left-color: var(--resolved); }
+.card-issue.is-overdue  { border-left-color: var(--overdue); }
+
+.card-issue .meta-box {
+    background-color: #f1f5f9;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 0.6rem 0.75rem;
+}
+
+/* ── Priority badges ── */
+.badge {
+    font-weight: 600;
+    font-size: 0.72rem;
+    letter-spacing: 0.4px;
+    padding: 0.3em 0.7em;
+    border-radius: 20px;
+}
+
+.priority-high   { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+.priority-medium { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+.priority-low    { background: #e0f2fe; color: #075985; border: 1px solid #bae6fd; }
+
+/* ── General card ── */
+.card {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+}
+
+/* ── People / Project cards ── */
+.entry-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--primary);
+    border-radius: 8px;
+    padding: 0.85rem 1rem;
+    margin-bottom: 0.6rem;
+}
+
+.entry-card .name {
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.entry-card .detail {
+    font-size: 0.82rem;
+    color: var(--muted);
+}
+
+/* ── Section card (forms) ── */
+.section-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+/* ── Page headings ── */
+.page-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.2rem;
+    letter-spacing: -0.3px;
+}
+
+.page-sub {
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+/* ── Login page ── */
+.login-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); /* Slate to Deep Indigo */
+}
+
+.login-card {
+    background: var(--surface);
+    border-radius: 14px;
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.login-logo {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.login-title {
+    text-align: center;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    color: var(--text);
+}
+
+.login-sub {
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 2rem;
+}
+
+.alert-error {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+    border-radius: 8px;
+    padding: 0.65rem 1rem;
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+    display: none;
 }

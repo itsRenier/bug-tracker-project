@@ -1,78 +1,54 @@
-// =============================================================
-// data-management.js — Member 3 (People & Projects)
-// =============================================================
+function renderPeople() {
+    const container = document.getElementById('person-list');
+    if (!container) return;
 
-function displayPeople() {
-  let people = getData(DB_PEOPLE);
-  let container = document.getElementById("peopleList");
-  if (!container) return;
-  
-  let htmlContent = ""; // Build string
-  people.forEach(p => {
-    htmlContent += `
-      <div class="card p-3 mb-2 shadow-sm border-start border-4 border-secondary">
-        <div class="fw-bold">${p.name} ${p.surname}</div>
-        <div class="text-muted small">${p.email} | @${p.username}</div>
-      </div>`;
-  });
-  container.innerHTML = htmlContent; // Inject once
+    const people = getData(DB_PEOPLE);
+    container.innerHTML = people.map(p => `
+        <div class="entry-card">
+            <div class="name">${escapeHTML(p.name)} ${escapeHTML(p.surname)}</div>
+            <div class="detail">${escapeHTML(p.email)} &bull; @${escapeHTML(p.username)}</div>
+        </div>`).join('');
 }
 
-document.getElementById("personForm")?.addEventListener("submit", function(e) {
-  e.preventDefault();
+function renderProjects() {
+    const container = document.getElementById('project-list');
+    if (!container) return;
 
-  let people = getData(DB_PEOPLE);
-
-  let newPerson = {
-    id: generateId(), // FIXED: Using Member 1's generateId function
-    name: document.getElementById("name").value,
-    surname: document.getElementById("surname").value,
-    email: document.getElementById("email").value,
-    username: document.getElementById("username").value
-  };
-
-  people.push(newPerson);
-  saveData(DB_PEOPLE, people); // FIXED: Using shared saveData
-
-  displayPeople();
-  e.target.reset(); // Clears form after submit
-});
-
-function displayProjects() {
-  let projects = getData(DB_PROJECTS);
-  let container = document.getElementById("projectList");
-  if (!container) return;
-  
-  let htmlContent = ""; // Build string
-  projects.forEach(p => {
-    htmlContent += `
-      <div class="card p-3 mb-2 shadow-sm border-start border-4 border-secondary">
-        <div class="fw-bold">${p.name}</div>
-        <div class="text-muted small">${p.description || 'No description provided'}</div>
-      </div>`;
-  });
-  container.innerHTML = htmlContent; // Inject once
+    const projects = getData(DB_PROJECTS);
+    container.innerHTML = projects.map(p => `
+        <div class="entry-card">
+            <div class="name">${escapeHTML(p.name)}</div>
+            <div class="detail">${escapeHTML(p.description || 'No description provided')}</div>
+        </div>`).join('');
 }
 
-document.getElementById("projectForm")?.addEventListener("submit", function(e) {
-  e.preventDefault();
-
-  let projects = getData(DB_PROJECTS);
-
-  let newProject = {
-    id: generateId(),
-    name: document.getElementById("projectName").value,
-    // FIXED: Capturing the project description from the form (Issue 5)
-    description: document.getElementById("projectDescription").value 
-  };
-
-  projects.push(newProject);
-  saveData(DB_PROJECTS, projects);
-
-  displayProjects();
-  e.target.reset(); // Clears form after submit
+document.getElementById('form-person')?.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const people = getData(DB_PEOPLE);
+    people.push({
+        id:       generateId(),
+        name:     document.getElementById('name').value,
+        surname:  document.getElementById('surname').value,
+        email:    document.getElementById('email').value,
+        username: document.getElementById('username').value
+    });
+    saveData(DB_PEOPLE, people);
+    renderPeople();
+    e.target.reset();
 });
 
-// Initialise page functions
-if (document.getElementById("peopleList")) displayPeople();
-if (document.getElementById("projectList")) displayProjects();
+document.getElementById('form-project')?.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const projects = getData(DB_PROJECTS);
+    projects.push({
+        id:          generateId(),
+        name:        document.getElementById('projectName').value,
+        description: document.getElementById('projectDescription').value
+    });
+    saveData(DB_PROJECTS, projects);
+    renderProjects();
+    e.target.reset();
+});
+
+if (document.getElementById('person-list'))  renderPeople();
+if (document.getElementById('project-list')) renderProjects();

@@ -1,134 +1,56 @@
 <!DOCTYPE html>
-<!--
-    index.html — Dashboard Page (Member 1)
-    =======================================
-    This is the main landing page of the BugTracker app.
-    It displays all recorded issues as Bootstrap cards,
-    and lets the user filter them by status using a dropdown.
-
-    Libraries used:
-      • Bootstrap 5.2 (CSS + JS) — loaded from a CDN (Content Delivery Network),
-        meaning we link to it online rather than downloading it ourselves.
-      • app.js — our own JavaScript file that handles all the logic.
--->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!-- Makes the page scale correctly on phones and tablets -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bug Tracker | Dashboard</title>
-
-    <!-- Bootstrap CSS: gives us pre-built styles, grid system, and components -->
+    <title>BugTracker | Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Our custom styles (colours, card borders, badges) -->
     <link rel="stylesheet" href="css/styles.css">
 </head>
+<body>
 
-<body class="bg-light">
-
-    <!-- =====================================================
-         NAVIGATION BAR
-         Uses Bootstrap's navbar component.
-         'navbar-dark bg-dark' = white text on a dark background.
-         The toggler button appears on small screens (mobile hamburger menu).
-    ====================================================== -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <nav class="navbar navbar-expand-lg mb-4">
         <div class="container-fluid">
-
-            <!-- Brand / App name — clicking it returns to the dashboard -->
-            <a class="navbar-brand fw-bold" href="index.html">🐞 BugTracker</a>
-
-            <!-- Hamburger button: visible only on small screens -->
+            <a class="navbar-brand" href="index.html">🐞 BugTracker</a>
             <button class="navbar-toggler" type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#navbarNav"
-                    aria-controls="navbarNav"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation">
+                    data-bs-toggle="collapse" data-bs-target="#nav"
+                    aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
-            <!-- Nav links — collapse into hamburger menu on small screens -->
-            <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="collapse navbar-collapse" id="nav">
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <!-- 'active' highlights the current page in the nav -->
-                        <a class="nav-link active" href="index.html">Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="pages/create-issue.html">Create Ticket</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="pages/people-management.html">People</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="pages/project-management.html">Projects</a>
-                    </li>
+                    <li class="nav-item"><a class="nav-link active" href="index.html">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="pages/create-issue.html">Create Ticket</a></li>
+                    <li class="nav-item"><a class="nav-link" href="pages/people-management.html">People</a></li>
+                    <li class="nav-item"><a class="nav-link" href="pages/project-management.html">Projects</a></li>
                 </ul>
+                <button id="logout-btn" class="btn btn-sm btn-outline-secondary text-white border-secondary">Logout</button>
             </div>
-
         </div>
     </nav>
 
-    <!-- =====================================================
-         MAIN CONTENT AREA
-         Bootstrap's 'container' class adds horizontal padding
-         and centres the content on wide screens.
-    ====================================================== -->
     <div class="container">
-
-        <!-- Page heading row: title on the left, controls on the right -->
         <div class="row mb-4 align-items-center">
-
             <div class="col-md-6">
-                <h2 class="fw-bold mb-0">Issue Dashboard</h2>
-                <p class="text-muted small mb-0">All recorded bugs and issues</p>
+                <h2 class="page-title">Issue Dashboard</h2>
+                <p class="page-sub">All recorded bugs and issues</p>
             </div>
-
-            <!-- Filter dropdown + New Ticket button -->
             <div class="col-md-6 text-md-end mt-3 mt-md-0">
-
-                <!--
-                    Status filter dropdown.
-                    id="statusFilter" is how app.js finds this element.
-                    When the user picks an option, app.js re-renders the cards.
-                    The 'value' attributes match the status strings stored
-                    in localStorage ('open', 'resolved', 'overdue').
-                -->
-                <select class="form-select w-auto d-inline-block" id="statusFilter">
+                <select class="form-select w-auto d-inline-block" id="filter-status">
                     <option value="all">All Statuses</option>
                     <option value="open">Open</option>
                     <option value="resolved">Resolved</option>
                     <option value="overdue">Overdue</option>
                 </select>
-
-                <!-- Shortcut button to the create issue page -->
                 <a href="pages/create-issue.html" class="btn btn-primary ms-2">+ New Ticket</a>
-
             </div>
         </div>
 
-        <!-- =====================================================
-             ISSUE CARDS CONTAINER
-             This div starts empty (with a loading message).
-             app.js finds it via id="issuesContainer" and fills it
-             with Bootstrap cards — one card per issue.
-        ====================================================== -->
-        <div class="row" id="issuesContainer">
-            <div class="col-12 text-center text-muted py-5">
-                <p>Loading issues...</p>
-            </div>
+        <div class="row" id="issue-list">
+            <div class="col-12 text-center text-muted py-5"><p>Loading issues...</p></div>
         </div>
+    </div>
 
-    </div><!-- end .container -->
-
-
-    <!-- =====================================================
-         SCRIPTS (placed at the bottom so HTML loads first)
-         1. Bootstrap JS bundle (needed for the navbar toggler)
-         2. Our own app.js
-    ====================================================== -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/app.js"></script>
 

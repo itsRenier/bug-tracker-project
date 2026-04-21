@@ -18,14 +18,29 @@
     </nav>
 
     <main class="container">
-        <h2>Project Management</h2>
-        <!-- Project management content will go here -->
+        <h2 class="fw-bold mb-4">Project Management</h2>
+        
+        <div class="card p-4 shadow-sm mb-4 border-0" style="background-color: #ffffff;">
+            <h5 class="mb-3 fw-bold text-dark">Create New Project</h5>
             <form id="projectForm">
-                <input type="text" id="projectName" placeholder="Project Name" required>
-                <input type="text" id="projectDescription" placeholder="Project Description" required>
-                <button type="submit">Add Project</button>
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-4">
+                        <label for="projectName" class="form-label small fw-semibold text-muted">Project Name</label>
+                        <input type="text" class="form-control" id="projectName" placeholder="e.g. Mobile App V2" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="projectDescription" class="form-label small fw-semibold text-muted">Short Description</label>
+                        <input type="text" class="form-control" id="projectDescription" placeholder="What is this project about?" required>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100 fw-bold">Add Project</button>
+                    </div>
+                </div>
             </form>
-            <div id="projectList"></div>
+        </div>
+
+        <h5 class="fw-bold text-dark mb-3 mt-5">Active Projects</h5>
+        <div id="projectList"></div>
     </main>
     
 
