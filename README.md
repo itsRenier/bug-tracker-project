@@ -1,3 +1,4 @@
+<pre>
 #WPR281 Group: FPretoriaPM - Bug Tracking System Project
 
 This project aims to create a website that can be used to log issues that typically occur in assignments, track their status, priority level and progress, and allow their details to be edited. It will also allow for member management for projects with multiple members as well as project management, for multiple projects.
@@ -112,3 +113,4 @@ Aden Gouws 604061
 Gontlafetse Maseng 604485
 Lourens Jonck 603246
 Renier van Rooyen 604214
+</pre>
