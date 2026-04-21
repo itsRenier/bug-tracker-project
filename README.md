@@ -1,5 +1,6 @@
 #WPR281 Group: FPretoriaPM - Bug Tracking System Project <br>
 <br>
+<br>
 This project aims to create a website that can be used to log issues that typically occur in assignments, track their status, priority level and progress, and allow their details to be edited. It will also allow for member management for projects with multiple members as well as project management, for multiple projects. <br>
 <br>
 <br>
@@ -71,42 +72,42 @@ This project aims to create a website that can be used to log issues that typica
 |Enter Issue Detail|       | Edit/Update Details|       | Add New Entries | 
 +------------------+       +--------------------+       +-----------------+
 
-Use case:
-
-•	Login-
-The first page will be the login page where the user will have to enter the right username and password.
-
-•	View Dashboard- 
+Use case: <br>
+ <br>
+•	Login- <br>
+The first page will be the login page where the user will have to enter the right username and password. <br>
+ <br>
+•	View Dashboard-  <br>
 All issues appear in the dashboard with status and priority badges. A filter can also be applied here to only show certain statuses (Open, Resolved, Overdue). 
-From here either one of 3 options can commence:
-
-1)	Create Issue- 
-    The user is taken to the “Create New Issue” screen where the user can:
-      a.	Return to the dashboard 
-      b.	Enter Issue Details- 
-          Enter all the required information for the issue (summary, description, identifiedBy, dateIdentified, project, status, priority, assignedTo, targetResolution, actualResolution, resolutionSummary).
-
-2)	View Issue Details- 
-    Displays all the information for a certain issue. The user can then either:
-      a.	Return to the dashboard
-      b.	Edit/Update Details- 
-          Issues can be modified and any of the information can be updated.
-
-3)	View People/Projects- 
-    There is a list of all the people that are working on a project, as well as a list of all the projects that can be viewed under the People and Projects tabs respectively. When the user is either on the Person or           Projects tabs, they can:
-      a.	Return to the dashboard 
-      b.	Add New Entries- 
-          Enter all the required information for a new person (name, surname, email, username). Or enter all the required information for a new project (name, description).
-
-•	When either one of the 3 options is complete, or backed out from, the user will be back on the Dashboard.
-
-
-##Requirements and Installation
-The only requirements are a stable internet connection and a computing device with a web browser. The system is a fully online website that can be used across all devices. Therefore, there is also no installation required.
-
-
+From here either one of 3 options can commence: <br>
+ <br>
+1)	Create Issue-  <br>
+    The user is taken to the “Create New Issue” screen where the user can: <br>
+      a.	Return to the dashboard  <br>
+      b.	Enter Issue Details-  <br>
+          Enter all the required information for the issue (summary, description, identifiedBy, dateIdentified, project, status, priority, assignedTo, targetResolution, actualResolution, resolutionSummary). <br>
+ <br>
+2)	View Issue Details-  <br>
+    Displays all the information for a certain issue. The user can then either: <br>
+      a.	Return to the dashboard <br>
+      b.	Edit/Update Details-  <br>
+          Issues can be modified and any of the information can be updated. <br>
+ <br>
+3)	View People/Projects-  <br>
+    There is a list of all the people that are working on a project, as well as a list of all the projects that can be viewed under the People and Projects tabs respectively. When the user is either on the Person or           Projects tabs, they can: <br>
+      a.	Return to the dashboard  <br>
+      b.	Add New Entries-  <br>
+          Enter all the required information for a new person (name, surname, email, username). Or enter all the required information for a new project (name, description). <br>
+ <br>
+•	When either one of the 3 options is complete, or backed out from, the user will be back on the Dashboard. <br>
+ <br>
+ <br>
+##Requirements and Installation <br>
+The only requirements are a stable internet connection and a computing device with a web browser. The system is a fully online website that can be used across all devices. Therefore, there is also no installation required. <br>
+ <br>
+ <br>
 ##Project Team Acknowledgement<br>
-Aden Gouws 604061
-Gontlafetse Maseng 604485
-Lourens Jonck 603246
+Aden Gouws 604061 <br>
+Gontlafetse Maseng 604485 <br>
+Lourens Jonck 603246 <br>
 Renier van Rooyen 604214
