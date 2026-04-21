@@ -1,6 +1,6 @@
-#WPR281 Group: FPretoriaPM - Bug Tracking System Project<br>
+#WPR281 Group: FPretoriaPM - Bug Tracking System Project <br>
 <br>
-This project aims to create a website that can be used to log issues that typically occur in assignments, track their status, priority level and progress, and allow their details to be edited. It will also allow for member management for projects with multiple members as well as project management, for multiple projects.
+This project aims to create a website that can be used to log issues that typically occur in assignments, track their status, priority level and progress, and allow their details to be edited. It will also allow for member management for projects with multiple members as well as project management, for multiple projects. <br>
 <br>
 <br>
 ##Features: <br>
@@ -22,7 +22,7 @@ This project aims to create a website that can be used to log issues that typica
   o	All entities (issues, people, projects) stored in localStorage <br>
   o	Data persists across browser refresh <br>
 • Responsive Design <br>
-  o	Built with Bootstrap 5 for mobile, tablet, and desktop compatibility
+  o	Built with Bootstrap 5 for mobile, tablet, and desktop compatibility <br>
 <br>
 <br>
 ##File Structure <br>
@@ -35,7 +35,7 @@ This project aims to create a website that can be used to log issues that typica
 /css/styles.css: Custom styles <br>
 /js/app.js: Shared utilities + dashboard logic <br>
 /js/data-management.js: People and project management <br>
-/js/issue-management.js: Issue creation, editing, and detail rendering
+/js/issue-management.js: Issue creation, editing, and detail rendering <br>
 <br>
 <br>
 ##Architecture <br>
