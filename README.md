@@ -4,7 +4,8 @@ This project aims to create a website that can be used to log issues that typica
 <br>
 <br>
 ##Features: <br>
-<p>
+
+<pre>
 • Issue Management <br>
   o	Create new issues with 11 required fields <br>
   o	Edit/update existing issues <br>
@@ -24,7 +25,8 @@ This project aims to create a website that can be used to log issues that typica
   o	Data persists across browser refresh <br>
 • Responsive Design <br>
   o	Built with Bootstrap 5 for mobile, tablet, and desktop compatibility <br>
-</p>
+</pre>
+
 <br>
 <br>
 ##File Structure <br>
