@@ -113,7 +113,8 @@ From here either one of 3 options can commence:
 
 ##Requirements and Installation
 The only requirements are a stable internet connection and a computing device with a web browser. The system 
-is a fully online website that can be used across all devices. Therefore, there is also no installation required.
+is a fully online website that can be used across all devices. Therefore, there is also no installation 
+required.
 
 
 ##Project Team Acknowledgement
