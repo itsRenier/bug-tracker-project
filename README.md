@@ -79,7 +79,7 @@ The first page will be the login page where the user will have to enter the righ
 •	View Dashboard-  <br>
 All issues appear in the dashboard with status and priority badges. A filter can also be applied here to only show certain statuses (Open, Resolved, Overdue). 
 From here either one of 3 options can commence: <br>
- <br>
+<br>
 1)	Create Issue-  <br>
     The user is taken to the “Create New Issue” screen where the user can: <br>
       a.	Return to the dashboard  <br>
