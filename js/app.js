@@ -2,10 +2,16 @@
 // app.js — Main Logic & Shared Database
 // =============================================================
 
+// PRESENTATION POINT 1: AVOIDING "MAGIC STRINGS"
+// We store our local storage keys as constants. If we ever need to change the database 
+// name, we only change it here. It also prevents typos across the rest of our files.
 const DB_ISSUES   = 'bugTracker_issues';
 const DB_PEOPLE   = 'bugTracker_people';
 const DB_PROJECTS = 'bugTracker_projects';
 
+// PRESENTATION POINT 2: THE "DRY" PRINCIPLE (Don't Repeat Yourself)
+// Instead of writing JSON.parse() and localStorage.getItem() dozens of times, 
+// we abstracted the database calls into these two helper functions. 
 function getData(key) {
     return JSON.parse(localStorage.getItem(key)) || [];
 }
@@ -14,10 +20,16 @@ function saveData(key, data) {
     localStorage.setItem(key, JSON.stringify(data));
 }
 
+// Utility function to simulate database primary keys. 
+// Generates a random alphanumeric string for new records.
 function generateId() {
     return '_' + Math.random().toString(36).substr(2, 9);
 }
 
+// PRESENTATION POINT 3: SECURITY & XSS PREVENTION
+// Since we are injecting user data into the DOM, we pass all text fields through this 
+// sanitizer. It converts HTML tags into safe string characters, completely preventing 
+// Cross-Site Scripting (XSS) attacks.
 function escapeHTML(str) {
     if (!str) return '';
     return str.toString()
@@ -28,6 +40,7 @@ function escapeHTML(str) {
         .replace(/'/g, '&#039;');
 }
 
+// Maps our database status strings to Bootstrap's native color utility classes.
 function getStatusColor(status) {
     if (status === 'open')     return 'primary';
     if (status === 'resolved') return 'success';
@@ -35,18 +48,25 @@ function getStatusColor(status) {
     return 'secondary';
 }
 
+// PRESENTATION POINT 4: ROUTE PROTECTION
+// This function acts as our frontend security gate. If the auth token isn't found 
+// in local storage, it immediately redirects the user back to the login screen.
 function requireAuth() {
     if (localStorage.getItem('bt_auth') !== 'true') {
         window.location.href = (window.location.pathname.includes('/pages/') ? '../' : '') + 'login.html';
     }
 }
 
+// Initializes the empty database arrays if this is the user's first time loading the app.
 function initDB() {
     if (!localStorage.getItem(DB_ISSUES))   saveData(DB_ISSUES, []);
     if (!localStorage.getItem(DB_PEOPLE))   saveData(DB_PEOPLE, []);
     if (!localStorage.getItem(DB_PROJECTS)) saveData(DB_PROJECTS, []);
 }
 
+// PRESENTATION POINT 5: DUMMY DATA SEEDING
+// To make the prototype testable, this function injects sample data. We use conditional 
+// checks (.length === 0) so we only seed data if the database is currently empty.
 function seedData() {
     // 1. Seed 4 People
     if (getData(DB_PEOPLE).length === 0) {
@@ -69,6 +89,7 @@ function seedData() {
     }
 
     // 3. Seed 10 Issues covering all statuses and priorities
+    // Notice how we link data using IDs (like identifiedBy: 'p1'), simulating a relational database.
     if (getData(DB_ISSUES).length === 0) {
         saveData(DB_ISSUES, [
             { id: generateId(), summary: 'Login button unresponsive', description: 'No console errors are thrown when clicking the main login button.', status: 'open', priority: 'high', identifiedBy: 'p1', assignedTo: 'p2', dateIdentified: '2026-04-01', targetResolution: '2026-04-28', project: 'pr1' },
@@ -85,14 +106,18 @@ function seedData() {
     }
 }
 
+// PRESENTATION POINT 6: DYNAMIC DOM RENDERING
 function renderDashboard(filterStatus = 'all') {
-    // Looks for 'issue-list' matching our index.html exactly
     const container = document.getElementById('issue-list');
     const issues = getData(DB_ISSUES);
     const people = getData(DB_PEOPLE);
 
+    // Applies the filter based on the dropdown selection
     const list = filterStatus === 'all' ? issues : issues.filter(i => i.status === filterStatus);
 
+    // PRESENTATION POINT 7: GUARD CLAUSES
+    // By handling the empty state immediately and returning out of the function, 
+    // we keep the main logic flat and avoid massive nested 'if' statements.
     if (list.length === 0) {
         container.innerHTML = '<div class="col-12 text-center text-muted py-5"><p>No issues found.</p></div>';
         return;
@@ -100,12 +125,19 @@ function renderDashboard(filterStatus = 'all') {
 
     let html = '';
 
+    // Loops through the array and constructs the HTML card for each issue.
     list.forEach(function (issue) {
+        // Relational lookup: Finding the assigned person's name using their ID
         const person = people.find(p => p.id === issue.assignedTo);
         const assignee = person ? person.name + ' ' + person.surname : 'Unassigned';
+        
+        // Capitalizes the first letter for the UI labels
         const statusLabel = issue.status.charAt(0).toUpperCase() + issue.status.slice(1);
         const priorityLabel = issue.priority.charAt(0).toUpperCase() + issue.priority.slice(1);
 
+        // PRESENTATION POINT 8: TEMPLATE LITERALS
+        // Using backticks allows us to write multi-line HTML directly in JS, securely 
+        // injecting our data variables using the escapeHTML sanitizer.
         html += `
             <div class="col-md-6 col-lg-4 mb-4">
                 <div class="card card-issue is-${issue.status} h-100">
@@ -134,11 +166,12 @@ function renderDashboard(filterStatus = 'all') {
             </div>`;
     });
 
+    // Pushes the fully constructed string into the DOM in one single operation for performance.
     container.innerHTML = html;
 }
 
+// Binds the HTML dropdown menu to our render function
 function setupFilter() {
-    // Looks for 'filter-status' matching our index.html exactly
     const filter = document.getElementById('filter-status');
     if (filter) {
         filter.addEventListener('change', function (e) {
@@ -147,17 +180,21 @@ function setupFilter() {
     }
 }
 
+// PRESENTATION POINT 9: EVENT DRIVEN ARCHITECTURE
+// DOMContentLoaded ensures our JavaScript only runs after the browser has finished 
+// reading the HTML structure, preventing "element not found" errors.
 document.addEventListener('DOMContentLoaded', function () {
     requireAuth();
     initDB();
 
-    // Runs dashboard code ONLY if the 'issue-list' ID is found on the page
+    // Context Check: Only runs the dashboard rendering logic if the user is actually on the dashboard.
     if (document.getElementById('issue-list')) {
         seedData();
         renderDashboard();
         setupFilter();
     }
 
+    // Attaches the logout logic dynamically so it applies to every page cleanly.
     const logoutBtn = document.getElementById('logout-btn');
     if (logoutBtn) {
         logoutBtn.addEventListener('click', function () {
