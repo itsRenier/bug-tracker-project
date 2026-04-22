@@ -2,14 +2,14 @@
 // app.js — Main Logic & Shared Database
 // =============================================================
 
-// PRESENTATION POINT 1: AVOIDING "MAGIC STRINGS"
+// AVOIDING "MAGIC STRINGS"
 // We store our local storage keys as constants. If we ever need to change the database 
 // name, we only change it here. It also prevents typos across the rest of our files.
 const DB_ISSUES   = 'bugTracker_issues';
 const DB_PEOPLE   = 'bugTracker_people';
 const DB_PROJECTS = 'bugTracker_projects';
 
-// PRESENTATION POINT 2: THE "DRY" PRINCIPLE (Don't Repeat Yourself)
+// THE "DRY" PRINCIPLE
 // Instead of writing JSON.parse() and localStorage.getItem() dozens of times, 
 // we abstracted the database calls into these two helper functions. 
 function getData(key) {
@@ -26,7 +26,7 @@ function generateId() {
     return '_' + Math.random().toString(36).substr(2, 9);
 }
 
-// PRESENTATION POINT 3: SECURITY & XSS PREVENTION
+// SECURITY & XSS PREVENTION
 // Since we are injecting user data into the DOM, we pass all text fields through this 
 // sanitizer. It converts HTML tags into safe string characters, completely preventing 
 // Cross-Site Scripting (XSS) attacks.
@@ -48,7 +48,7 @@ function getStatusColor(status) {
     return 'secondary';
 }
 
-// PRESENTATION POINT 4: ROUTE PROTECTION
+// ROUTE PROTECTION
 // This function acts as our frontend security gate. If the auth token isn't found 
 // in local storage, it immediately redirects the user back to the login screen.
 function requireAuth() {
@@ -64,7 +64,7 @@ function initDB() {
     if (!localStorage.getItem(DB_PROJECTS)) saveData(DB_PROJECTS, []);
 }
 
-// PRESENTATION POINT 5: DUMMY DATA SEEDING
+// DUMMY DATA SEEDING
 // To make the prototype testable, this function injects sample data. We use conditional 
 // checks (.length === 0) so we only seed data if the database is currently empty.
 function seedData() {
@@ -106,7 +106,7 @@ function seedData() {
     }
 }
 
-// PRESENTATION POINT 6: DYNAMIC DOM RENDERING
+// DYNAMIC DOM RENDERING
 function renderDashboard(filterStatus = 'all') {
     const container = document.getElementById('issue-list');
     const issues = getData(DB_ISSUES);
@@ -115,7 +115,7 @@ function renderDashboard(filterStatus = 'all') {
     // Applies the filter based on the dropdown selection
     const list = filterStatus === 'all' ? issues : issues.filter(i => i.status === filterStatus);
 
-    // PRESENTATION POINT 7: GUARD CLAUSES
+    // GUARD CLAUSES
     // By handling the empty state immediately and returning out of the function, 
     // we keep the main logic flat and avoid massive nested 'if' statements.
     if (list.length === 0) {
@@ -135,7 +135,7 @@ function renderDashboard(filterStatus = 'all') {
         const statusLabel = issue.status.charAt(0).toUpperCase() + issue.status.slice(1);
         const priorityLabel = issue.priority.charAt(0).toUpperCase() + issue.priority.slice(1);
 
-        // PRESENTATION POINT 8: TEMPLATE LITERALS
+        // TEMPLATE LITERALS
         // Using backticks allows us to write multi-line HTML directly in JS, securely 
         // injecting our data variables using the escapeHTML sanitizer.
         html += `
@@ -180,7 +180,7 @@ function setupFilter() {
     }
 }
 
-// PRESENTATION POINT 9: EVENT DRIVEN ARCHITECTURE
+// EVENT DRIVEN ARCHITECTURE
 // DOMContentLoaded ensures our JavaScript only runs after the browser has finished 
 // reading the HTML structure, preventing "element not found" errors.
 document.addEventListener('DOMContentLoaded', function () {
