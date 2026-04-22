@@ -51,7 +51,6 @@ function renderIssueDetail(issueId) {
 
     const issue   = issues.find(i => i.id === issueId);
     if (!issue) {
-        // FIXED ID: issue-detail -> issueDetails
         document.getElementById('issueDetails').textContent = 'Issue not found.';
         return;
     }
@@ -68,7 +67,6 @@ function renderIssueDetail(issueId) {
         ? `${assignee.name} ${assignee.surname} <span class="text-muted small">(@${assignee.username})</span>`
         : 'Unassigned';
 
-    // FIXED ID: issue-detail -> issueDetails
     document.getElementById('issueDetails').innerHTML = `
         <h4 class="fw-bold">${escapeHTML(issue.summary)}</h4>
         <hr>
@@ -93,7 +91,6 @@ function renderIssueDetail(issueId) {
             </div>
         </div>`;
 
-    // FIXED ID: edit-btn -> editBtn
     const editBtn = document.getElementById('editBtn');
     if (editBtn) editBtn.href = `create-issue.html?id=${issue.id}`;
 }
@@ -120,7 +117,6 @@ function initForm() {
         }
     }
 
-    // FIXED ID: form-issue -> issueForm
     const form = document.getElementById('issueForm');
     form.addEventListener('submit', function (e) {
         e.preventDefault();
@@ -162,7 +158,6 @@ function initDetail() {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    // FIXED IDs: form-issue -> issueForm AND issue-detail -> issueDetails
     if (document.getElementById('issueForm'))    initForm();
     if (document.getElementById('issueDetails'))  initDetail();
 });
