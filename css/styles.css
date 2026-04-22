@@ -1,5 +1,18 @@
+/* =============================================================
+   styles.css — UI Architecture & Theming
+   ============================================================= */
+
+/* 1. TYPOGRAPHY: 
+   Importing 'Inter' for a clean, highly legible interface designed 
+   specifically for data-heavy computer screens.
+*/
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
+/* 2. DESIGN TOKENS (CSS VARIABLES): 
+   By storing colors as variables, we adhere to the DRY principle. 
+   If the client ever wants a brand redesign, we only change the hex 
+   codes here, and the entire app updates instantly. 
+*/
 :root {
     --primary: #4f46e5;       /* Premium Indigo */
     --primary-dark: #4338ca;  /* Darker Indigo for hover states */
@@ -8,9 +21,9 @@
     --border: #e2e8f0;        /* Crisp Slate border */
     --text: #334155;          /* Deep Slate text */
     --muted: #64748b;         /* Muted Slate text */
-    --open: #3b82f6;          /* Crisp Blue */
-    --resolved: #10b981;      /* Emerald Green */
-    --overdue: #ef4444;       /* Vibrant Red */
+    --open: #3b82f6;          /* Crisp Blue for Active Issues */
+    --resolved: #10b981;      /* Emerald Green for Success */
+    --overdue: #ef4444;       /* Vibrant Red for Critical Priority */
 }
 
 * {
@@ -24,9 +37,9 @@ body {
     margin: 0;
 }
 
-/* ── Navbar ── */
+/* ── Navbar Architecture ── */
 .navbar {
-    background-color: #0f172a !important; /* Slate Dark */
+    background-color: #0f172a !important; 
     border-bottom: 3px solid var(--primary);
     padding: 0.75rem 1.5rem;
 }
@@ -53,7 +66,10 @@ body {
     color: #ffffff !important;
 }
 
-/* ── Buttons ── */
+/* 3. COMPONENT STYLING & MICRO-INTERACTIONS:
+   Buttons use smooth transitions and drop shadows to give users 
+   immediate visual feedback when they interact with the system.
+*/
 .btn-primary {
     background-color: var(--primary);
     border-color: var(--primary);
@@ -91,7 +107,7 @@ body {
     border-radius: 8px;
 }
 
-/* ── Form controls ── */
+/* ── Forms & Accessibility Focus States ── */
 .form-control,
 .form-select {
     border: 1px solid var(--border);
@@ -101,10 +117,11 @@ body {
     transition: border-color 0.15s, box-shadow 0.15s;
 }
 
+/* Custom focus rings ensure ADA/WCAG compliance for keyboard navigation */
 .form-control:focus,
 .form-select:focus {
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15); /* Blue focus ring */
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15); 
     outline: none;
 }
 
@@ -117,7 +134,10 @@ body {
     margin-bottom: 0.3rem;
 }
 
-/* ── Issue cards ── */
+/* 4. DYNAMIC STATE CLASSES:
+   These '.is-' classes are injected by JavaScript. This keeps our 
+   styling separate from our logic (Separation of Concerns).
+*/
 .card-issue {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -143,7 +163,7 @@ body {
     padding: 0.6rem 0.75rem;
 }
 
-/* ── Priority badges ── */
+/* ── Priority Badges ── */
 .badge {
     font-weight: 600;
     font-size: 0.72rem;
@@ -156,13 +176,12 @@ body {
 .priority-medium { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
 .priority-low    { background: #e0f2fe; color: #075985; border: 1px solid #bae6fd; }
 
-/* ── General card ── */
+/* ── General Elements ── */
 .card {
     border: 1px solid var(--border);
     border-radius: 10px;
 }
 
-/* ── People / Project cards ── */
 .entry-card {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -172,17 +191,9 @@ body {
     margin-bottom: 0.6rem;
 }
 
-.entry-card .name {
-    font-weight: 600;
-    font-size: 0.95rem;
-}
+.entry-card .name { font-weight: 600; font-size: 0.95rem; }
+.entry-card .detail { font-size: 0.82rem; color: var(--muted); }
 
-.entry-card .detail {
-    font-size: 0.82rem;
-    color: var(--muted);
-}
-
-/* ── Section card (forms) ── */
 .section-card {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -191,26 +202,19 @@ body {
     margin-bottom: 1.5rem;
 }
 
-/* ── Page headings ── */
-.page-title {
-    font-size: 1.4rem;
-    font-weight: 700;
-    margin-bottom: 0.2rem;
-    letter-spacing: -0.3px;
-}
+.page-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 0.2rem; letter-spacing: -0.3px; }
+.page-sub { font-size: 0.85rem; color: var(--muted); }
 
-.page-sub {
-    font-size: 0.85rem;
-    color: var(--muted);
-}
-
-/* ── Login page ── */
+/* 5. CUSTOM LOGIN LAYOUT:
+   Uses Flexbox to perfectly center the login card on any viewport,
+   with a premium gradient background.
+*/
 .login-wrapper {
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); /* Slate to Deep Indigo */
+    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); 
 }
 
 .login-card {
@@ -222,26 +226,9 @@ body {
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 }
 
-.login-logo {
-    font-size: 2.5rem;
-    text-align: center;
-    margin-bottom: 0.5rem;
-}
-
-.login-title {
-    text-align: center;
-    font-size: 1.4rem;
-    font-weight: 700;
-    margin-bottom: 0.25rem;
-    color: var(--text);
-}
-
-.login-sub {
-    text-align: center;
-    font-size: 0.85rem;
-    color: var(--muted);
-    margin-bottom: 2rem;
-}
+.login-logo { font-size: 2.5rem; text-align: center; margin-bottom: 0.5rem; }
+.login-title { text-align: center; font-size: 1.4rem; font-weight: 700; margin-bottom: 0.25rem; color: var(--text); }
+.login-sub { text-align: center; font-size: 0.85rem; color: var(--muted); margin-bottom: 2rem; }
 
 .alert-error {
     background: #fef2f2;
