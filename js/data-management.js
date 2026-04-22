@@ -26,39 +26,38 @@ function renderProjects() {
 
 // Handle the people form submission.
 // Adds a person to localStorage.
-document.getElementById('personForm')?.addEventListener('submit', function (e) {
-    e.preventDefault();
-    const people = getData(DB_PEOPLE);
-    people.push({
-        id:       generateId(),
-        name:     document.getElementById('name').value,
-        surname:  document.getElementById('surname').value,
-        email:    document.getElementById('email').value,
-        username: document.getElementById('username').value
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('personForm')?.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const people = getData(DB_PEOPLE);
+        people.push({
+            id:       generateId(),
+            name:     document.getElementById('name').value,
+            surname:  document.getElementById('surname').value,
+            email:    document.getElementById('email').value,
+            username: document.getElementById('username').value
+        });
+        saveData(DB_PEOPLE, people);
+        renderPeople();
+        e.target.reset();
     });
-    saveData(DB_PEOPLE, people);
-    renderPeople();
-    e.target.reset();
-});
-// Handle the project form submission.
-// Adds a project to localStorage.
-document.getElementById('projectForm')?.addEventListener('submit', function (e) {
-    e.preventDefault();
-    const projects = getData(DB_PROJECTS);
-    projects.push({
-        id:          generateId(),
-        name:        document.getElementById('projectName').value,
-        description: document.getElementById('projectDescription').value
+    
+    // Handle the project form submission.
+    // Adds a project to localStorage.
+    document.getElementById('projectForm')?.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const projects = getData(DB_PROJECTS);
+        projects.push({
+            id:          generateId(),
+            name:        document.getElementById('projectName').value,
+            description: document.getElementById('projectDescription').value
+        });
+        saveData(DB_PROJECTS, projects);
+        renderProjects();
+        e.target.reset();
     });
-    saveData(DB_PROJECTS, projects);
-    renderProjects();
-    e.target.reset();
-});
 
-// Initial rendering of people and projects on page load.
-// Only runs the relevent rendering function.
-// depending on which page is being viewed (people or projects).
-// If on people page, shows people.
-if (document.getElementById('peopleList'))  renderPeople();
-// If on projects page, shows projects.
-if (document.getElementById('projectList')) renderProjects();
+    // Initial rendering
+    if (document.getElementById('peopleList'))  renderPeople();
+    if (document.getElementById('projectList')) renderProjects();
+});
