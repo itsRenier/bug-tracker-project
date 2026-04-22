@@ -1,186 +1,163 @@
-// Utility to get an array from localStorage or return empty array
-function getLocalStorageArray(key) {
-  const data = localStorage.getItem(key);
-  return data ? JSON.parse(data) : [];
+function fillSelect(selectId, items, valueKey, textKey) {
+    const select = document.getElementById(selectId);
+    if (!select) return;
+    select.innerHTML = '<option value="">Select</option>';
+    items.forEach(function (item) {
+        const option = document.createElement('option');
+        option.value = item[valueKey];
+        option.textContent = item.surname ? item[textKey] + ' ' + item.surname : item[textKey];
+        select.appendChild(option);
+    });
 }
 
-// Utility to save array to localStorage
-function setLocalStorageArray(key, array) {
-  localStorage.setItem(key, JSON.stringify(array));
-}
-
-// Load people and projects for select dropdowns
-function populateSelectOptions(selectId, array, valueKey, textKey) {
-  const select = document.getElementById(selectId);
-  if (!select) return;
-  select.innerHTML = '<option value="">Select</option>';
-  array.forEach((item) => {
-    const option = document.createElement('option');
-    option.value = item[valueKey];
-    option.textContent = item[textKey];
-    select.appendChild(option);
-  });
-}
-
-// Form validation helper
-function validateForm(form) {
-  if (!form) return false;
-  return form.checkValidity();
-}
-
-// Generate unique ID (simple)
-function generateId() {
-  return Date.now().toString();
-}
-
-// Save new or update existing issue
-function saveIssue(data, isEdit = false) {
-  let issues = getLocalStorageArray('issues');
-  if (isEdit) {
-    // Update existing issue by id
-    const index = issues.findIndex((i) => i.id === data.id);
-    if (index !== -1) {
-      issues[index] = data;
+function saveIssue(data, isEdit) {
+    let issues = getData(DB_ISSUES);
+    if (isEdit) {
+        const idx = issues.findIndex(i => i.id === data.id);
+        if (idx !== -1) {
+            issues[idx] = data;
+        } else {
+            issues.push(data);
+        }
     } else {
-      issues.push(data);
+        issues.push(data);
     }
-  } else {
-    // Add new
-    issues.push(data);
-  }
-  setLocalStorageArray('issues', issues);
+    saveData(DB_ISSUES, issues);
 }
 
-// Load issue data into form for editing
 function loadIssueIntoForm(issueId) {
-  const issues = getLocalStorageArray('issues');
-  const issue = issues.find((i) => i.id === issueId);
-  if (!issue) return null;
+    const issue = getData(DB_ISSUES).find(i => i.id === issueId);
+    if (!issue) return null;
 
-  // Fill out form fields
-  document.getElementById('summary').value = issue.summary;
-  document.getElementById('description').value = issue.description;
-  document.getElementById('identifiedBy').value = issue.identifiedBy;
-  document.getElementById('dateIdentified').value = issue.dateIdentified;
-  document.getElementById('project').value = issue.project;
-  document.getElementById('status').value = issue.status;
-  document.getElementById('priority').value = issue.priority;
-  document.getElementById('assignedTo').value = issue.assignedTo;
-  document.getElementById('targetResolution').value = issue.targetResolution;
-  document.getElementById('actualResolution').value = issue.actualResolution || '';
-  document.getElementById('resolutionSummary').value = issue.resolutionSummary || '';
+    document.getElementById('summary').value           = issue.summary;
+    document.getElementById('description').value       = issue.description;
+    document.getElementById('identifiedBy').value      = issue.identifiedBy;
+    document.getElementById('dateIdentified').value    = issue.dateIdentified;
+    document.getElementById('project').value           = issue.project;
+    document.getElementById('status').value            = issue.status;
+    document.getElementById('priority').value          = issue.priority;
+    document.getElementById('assignedTo').value        = issue.assignedTo;
+    document.getElementById('targetResolution').value  = issue.targetResolution;
+    document.getElementById('actualResolution').value  = issue.actualResolution || '';
+    document.getElementById('resolutionSummary').value = issue.resolutionSummary || '';
 
-  return issue;
+    return issue;
 }
 
-// Render issue detail page
-function renderIssueDetails(issueId) {
-  const issues = getLocalStorageArray('issues');
-  const people = getLocalStorageArray('people');
-  const projects = getLocalStorageArray('projects');
+function renderIssueDetail(issueId) {
+    const issues   = getData(DB_ISSUES);
+    const people   = getData(DB_PEOPLE);
+    const projects = getData(DB_PROJECTS);
 
-  const issue = issues.find(i => i.id === issueId);
-  if (!issue) {
-    document.getElementById('issueDetails').textContent = 'Issue not found.';
-    return;
-  }
-
-  const personReporter = people.find(p => p.id === issue.identifiedBy);
-  const personAssigned = people.find(p => p.id === issue.assignedTo);
-  const project = projects.find(pr => pr.id === issue.project);
-
-  const container = document.getElementById('issueDetails');
-  container.innerHTML = `
-    <h4>${issue.summary}</h4>
-    <p><strong>Description:</strong> ${issue.description}</p>
-    <p><strong>Identified By:</strong> ${personReporter ? personReporter.name + ' ' + personReporter.surname : 'Unknown'}</p>
-    <p><strong>Date Identified:</strong> ${issue.dateIdentified}</p>
-    <p><strong>Project:</strong> ${project ? project.name : 'Unknown'}</p>
-    <p><strong>Status:</strong> ${issue.status.charAt(0).toUpperCase() + issue.status.slice(1)}</p>
-    <p><strong>Priority:</strong> ${issue.priority.charAt(0).toUpperCase() + issue.priority.slice(1)}</p>
-    <p><strong>Assigned To:</strong> ${personAssigned ? personAssigned.name + ' ' + personAssigned.surname : 'Unassigned'}</p>
-    <p><strong>Target Resolution Date:</strong> ${issue.targetResolution}</p>
-    <p><strong>Actual Resolution Date:</strong> ${issue.actualResolution || '-'}</p>
-    <p><strong>Resolution Summary:</strong> ${issue.resolutionSummary || '-'}</p>
-  `;
-
-  // Set Edit button link with issue ID query param
-  const editBtn = document.getElementById('editBtn');
-  if (editBtn) {
-    editBtn.href = `create-issue.html?id=${issue.id}`;
-  }
-}
-
-// On page load logic for create/edit form
-function initializeForm() {
-  const people = getLocalStorageArray('people');
-  const projects = getLocalStorageArray('projects');
-
-  // Populate selects
-  populateSelectOptions('identifiedBy', people, 'id', 'name');
-  populateSelectOptions('assignedTo', people, 'id', 'name');
-  populateSelectOptions('project', projects, 'id', 'name');
-
-  // Check if editing (URL param ?id=)
-  const params = new URLSearchParams(window.location.search);
-  const issueId = params.get('id');
-
-  if (issueId) {
-    // Editing mode - load data into form
-    const issue = loadIssueIntoForm(issueId);
+    const issue   = issues.find(i => i.id === issueId);
     if (!issue) {
-      alert('Issue not found.');
-      window.location.href = '../index.html';
-    }
-  }
-
-  // Form submission
-  const form = document.getElementById('issueForm');
-  form.addEventListener('submit', function (evt) {
-    evt.preventDefault();
-    if (!validateForm(form)) {
-      evt.stopPropagation();
-      form.classList.add('was-validated');
-      return;
+        document.getElementById('issueDetails').textContent = 'Issue not found.';
+        return;
     }
 
-    const formData = {
-      id: issueId || generateId(),
-      summary: document.getElementById('summary').value.trim(),
-      description: document.getElementById('description').value.trim(),
-      identifiedBy: document.getElementById('identifiedBy').value,
-      dateIdentified: document.getElementById('dateIdentified').value,
-      project: document.getElementById('project').value,
-      status: document.getElementById('status').value,
-      priority: document.getElementById('priority').value,
-      assignedTo: document.getElementById('assignedTo').value,
-      targetResolution: document.getElementById('targetResolution').value,
-      actualResolution: document.getElementById('actualResolution').value || '',
-      resolutionSummary: document.getElementById('resolutionSummary').value.trim() || ''
-    };
+    const reporter = people.find(p => p.id === issue.identifiedBy);
+    const assignee = people.find(p => p.id === issue.assignedTo);
+    const project  = projects.find(pr => pr.id === issue.project);
 
-    saveIssue(formData, !!issueId);
-    alert('Issue saved successfully!');
-    window.location.href = '../index.html';
-  });
+    const reporterHTML = reporter
+        ? `${reporter.name} ${reporter.surname} <span class="text-muted small">(@${reporter.username})</span>`
+        : 'Unknown';
+
+    const assigneeHTML = assignee
+        ? `${assignee.name} ${assignee.surname} <span class="text-muted small">(@${assignee.username})</span>`
+        : 'Unassigned';
+
+    document.getElementById('issueDetails').innerHTML = `
+        <h4 class="fw-bold">${escapeHTML(issue.summary)}</h4>
+        <hr>
+        <div class="row">
+            <div class="col-md-8">
+                <p class="mb-3"><strong>Description</strong><br>${escapeHTML(issue.description)}</p>
+                <p class="mb-0"><strong>Resolution Summary</strong><br>
+                    ${issue.resolutionSummary ? escapeHTML(issue.resolutionSummary) : '<span class="text-muted">Not resolved yet</span>'}
+                </p>
+            </div>
+            <div class="col-md-4 bg-light p-3 rounded border">
+                <p class="mb-2 small"><strong>Status:</strong>
+                    <span class="badge bg-${getStatusColor(issue.status)} ms-1">${issue.status.charAt(0).toUpperCase() + issue.status.slice(1)}</span>
+                </p>
+                <p class="mb-2 small"><strong>Priority:</strong> <span class="text-capitalize">${issue.priority}</span></p>
+                <p class="mb-2 small"><strong>Project:</strong> ${project ? escapeHTML(project.name) : 'Unknown'}</p>
+                <hr>
+                <p class="mb-2 small"><strong>Reported By:</strong><br>${reporterHTML}</p>
+                <p class="mb-2 small"><strong>Date Identified:</strong> ${escapeHTML(issue.dateIdentified)}</p>
+                <p class="mb-2 small"><strong>Assigned To:</strong><br>${assigneeHTML}</p>
+                <p class="mb-0 small"><strong>Target Date:</strong> ${escapeHTML(issue.targetResolution)}</p>
+            </div>
+        </div>`;
+
+    const editBtn = document.getElementById('editBtn');
+    if (editBtn) editBtn.href = `create-issue.html?id=${issue.id}`;
 }
 
-// On load for detail page
-function initializeDetail() {
-  const params = new URLSearchParams(window.location.search);
-  const issueId = params.get('id');
-  if (!issueId) {
-    document.getElementById('issueDetails').textContent = 'No issue selected.';
-    return;
-  }
-  renderIssueDetails(issueId);
+function initForm() {
+    const people   = getData(DB_PEOPLE);
+    const projects = getData(DB_PROJECTS);
+
+    fillSelect('identifiedBy', people,   'id', 'name');
+    fillSelect('assignedTo',   people,   'id', 'name');
+    fillSelect('project',      projects, 'id', 'name');
+
+    const params  = new URLSearchParams(window.location.search);
+    const issueId = params.get('id');
+
+    if (issueId) {
+        const heading = document.querySelector('h2');
+        if (heading) heading.textContent = 'Edit Issue';
+
+        const issue = loadIssueIntoForm(issueId);
+        if (!issue) {
+            alert('Issue not found.');
+            window.location.href = '../index.html';
+        }
+    }
+
+    const form = document.getElementById('issueForm');
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (!form.checkValidity()) {
+            form.classList.add('was-validated');
+            return;
+        }
+
+        const data = {
+            id: issueId || generateId(),
+            summary:           document.getElementById('summary').value.trim(),
+            description:       document.getElementById('description').value.trim(),
+            identifiedBy:      document.getElementById('identifiedBy').value,
+            dateIdentified:    document.getElementById('dateIdentified').value,
+            project:           document.getElementById('project').value,
+            status:            document.getElementById('status').value,
+            priority:          document.getElementById('priority').value,
+            assignedTo:        document.getElementById('assignedTo').value,
+            targetResolution:  document.getElementById('targetResolution').value,
+            actualResolution:  document.getElementById('actualResolution').value || '',
+            resolutionSummary: document.getElementById('resolutionSummary').value.trim() || ''
+        };
+
+        saveIssue(data, !!issueId);
+        alert('Issue saved successfully!');
+        window.location.href = '../index.html';
+    });
 }
 
-// Determine which page and initialize appropriately
-document.addEventListener('DOMContentLoaded', () => {
-  if (document.getElementById('issueForm')) {
-    initializeForm();
-  } else if (document.getElementById('issueDetails')) {
-    initializeDetail();
-  }
+function initDetail() {
+    const params  = new URLSearchParams(window.location.search);
+    const issueId = params.get('id');
+    if (!issueId) {
+        // FIXED ID: issue-detail -> issueDetails
+        document.getElementById('issueDetails').textContent = 'No issue selected.';
+        return;
+    }
+    renderIssueDetail(issueId);
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    if (document.getElementById('issueForm'))    initForm();
+    if (document.getElementById('issueDetails'))  initDetail();
 });
