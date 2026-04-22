@@ -1,3 +1,4 @@
+// Displays all saved people.
 function renderPeople() {
     const container = document.getElementById('peopleList');
     if (!container) return;
@@ -10,6 +11,7 @@ function renderPeople() {
         </div>`).join('');
 }
 
+// Displays all saved projects.
 function renderProjects() {
     const container = document.getElementById('projectList');
     if (!container) return;
@@ -22,6 +24,8 @@ function renderProjects() {
         </div>`).join('');
 }
 
+// Handle the people form submission.
+// Adds a person to localStorage.
 document.getElementById('personForm')?.addEventListener('submit', function (e) {
     e.preventDefault();
     const people = getData(DB_PEOPLE);
@@ -36,7 +40,8 @@ document.getElementById('personForm')?.addEventListener('submit', function (e) {
     renderPeople();
     e.target.reset();
 });
-
+// Handle the project form submission.
+// Adds a project to localStorage.
 document.getElementById('projectForm')?.addEventListener('submit', function (e) {
     e.preventDefault();
     const projects = getData(DB_PROJECTS);
@@ -50,5 +55,10 @@ document.getElementById('projectForm')?.addEventListener('submit', function (e) 
     e.target.reset();
 });
 
+// Initial rendering of people and projects on page load.
+// Only runs the relevent rendering function.
+// depending on which page is being viewed (people or projects).
+// If on people page, shows people.
 if (document.getElementById('peopleList'))  renderPeople();
+// If on projects page, shows projects.
 if (document.getElementById('projectList')) renderProjects();
