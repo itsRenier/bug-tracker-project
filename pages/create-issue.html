@@ -9,12 +9,12 @@
     rel="stylesheet"
   />
 
-  // Our CSS
+  <!--Link to our CSS -->
   <link rel="stylesheet" href="../css/styles.css" />
 </head>
 <body class="bg-light">
 
-  //Navigation bar with links to main page 
+  <!-- Navigation bar with links to main page  -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
     <div class="container-fluid">
       <a class="navbar-brand" href="../index.html">🐞 BugTracker</a>
@@ -29,17 +29,17 @@
   <main class="container">
     <h2>Create New Issue</h2>
 
-    // The issue creation/editing form 
+    <!-- The issue creation/editing form  -->
     <form id="issueForm" class="mt-4 needs-validation" novalidate>
 
-      // Summary Input
+      <!-- Summary Input -->
       <div class="mb-3">
         <label for="summary" class="form-label">Summary <span class="text-danger">*</span></label>
         <input type="text" class="form-control" id="summary" required />
         <div class="invalid-feedback">Summary is required.</div>
       </div>
 
-      // Description textarea
+      <!-- Description textarea -->
       <div class="mb-3">
         <label for="description" class="form-label">Description <span class="text-danger">*</span></label>
         <textarea class="form-control" id="description" rows="4" required></textarea>
@@ -47,14 +47,14 @@
       </div>
 
 
-      // Dropdown selector of who identified the issue
+      <!-- Dropdown selector of who identified the issue -->
       <div class="mb-3">
         <label for="identifiedBy" class="form-label">Identified By <span class="text-danger">*</span></label>
         <select class="form-select" id="identifiedBy" required></select>
         <div class="invalid-feedback">Please select who identified the issue.</div>
       </div>
 
-      //Date when issue was identified
+      <!-- Date when issue was identified -->
       <div class="mb-3">
         <label for="dateIdentified" class="form-label">Date Identified <span class="text-danger">*</span></label>
         <input type="date" class="form-control" id="dateIdentified" required />
@@ -68,7 +68,7 @@
       </div>
 
 
-      // Status selector(open, resolved, overdue)
+      <!-- Status selector(open, resolved, overdue) -->
       <div class="mb-3">
         <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
         <select class="form-select" id="status" required>
@@ -81,7 +81,7 @@
       </div>
 
 
-      // Priority selector
+      <!-- Priority selector -->
       <div class="mb-3">
         <label for="priority" class="form-label">Priority <span class="text-danger">*</span></label>
         <select class="form-select" id="priority" required>
@@ -93,14 +93,14 @@
         <div class="invalid-feedback">Priority is required.</div>
       </div>
 
-      // Assigned to person dropdown 
+      <!-- Assigned to person dropdown  -->
       <div class="mb-3">
         <label for="assignedTo" class="form-label">Assigned To <span class="text-danger">*</span></label>
         <select class="form-select" id="assignedTo" required></select>
         <div class="invalid-feedback">Please assign this issue to someone.</div>
       </div>
 
-      //Target resolution date 
+      <!-- Target resolution date  -->
       <div class="mb-3">
         <label for="targetResolution" class="form-label">Target Resolution Date <span class="text-danger">*</span></label>
         <input type="date" class="form-control" id="targetResolution" required />
@@ -112,7 +112,7 @@
         <input type="date" class="form-control" id="actualResolution" />
       </div>
 
-      // Optional resolution summary
+      <!-- Optional resolution summary -->
       <div class="mb-3">
         <label for="resolutionSummary" class="form-label">Resolution Summary</label>
         <textarea class="form-control" id="resolutionSummary" rows="3"></textarea>
@@ -122,10 +122,10 @@
     </form>
   </main>
 
-  //Boostrap JS bundle
+  <!-- Boostrap JS bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 
-  Custom seperate JS file for issue management
+  <!-- Custom seperate JS file for issue management -->
   <script src="../js/issue-management.js"></script>
 </body>
 </html>
