@@ -150,7 +150,6 @@ function initDetail() {
     const params  = new URLSearchParams(window.location.search);
     const issueId = params.get('id');
     if (!issueId) {
-        // FIXED ID: issue-detail -> issueDetails
         document.getElementById('issueDetails').textContent = 'No issue selected.';
         return;
     }
