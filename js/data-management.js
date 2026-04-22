@@ -1,5 +1,6 @@
 function renderPeople() {
-    const container = document.getElementById('person-list');
+    // FIXED ID: person-list -> peopleList
+    const container = document.getElementById('peopleList');
     if (!container) return;
 
     const people = getData(DB_PEOPLE);
@@ -11,7 +12,8 @@ function renderPeople() {
 }
 
 function renderProjects() {
-    const container = document.getElementById('project-list');
+    // FIXED ID: project-list -> projectList
+    const container = document.getElementById('projectList');
     if (!container) return;
 
     const projects = getData(DB_PROJECTS);
@@ -22,7 +24,8 @@ function renderProjects() {
         </div>`).join('');
 }
 
-document.getElementById('form-person')?.addEventListener('submit', function (e) {
+// FIXED ID: form-person -> personForm
+document.getElementById('personForm')?.addEventListener('submit', function (e) {
     e.preventDefault();
     const people = getData(DB_PEOPLE);
     people.push({
@@ -37,7 +40,8 @@ document.getElementById('form-person')?.addEventListener('submit', function (e) 
     e.target.reset();
 });
 
-document.getElementById('form-project')?.addEventListener('submit', function (e) {
+// FIXED ID: form-project -> projectForm
+document.getElementById('projectForm')?.addEventListener('submit', function (e) {
     e.preventDefault();
     const projects = getData(DB_PROJECTS);
     projects.push({
@@ -50,5 +54,6 @@ document.getElementById('form-project')?.addEventListener('submit', function (e)
     e.target.reset();
 });
 
-if (document.getElementById('person-list'))  renderPeople();
-if (document.getElementById('project-list')) renderProjects();
+// FIXED IDs for initialization
+if (document.getElementById('peopleList'))  renderPeople();
+if (document.getElementById('projectList')) renderProjects();

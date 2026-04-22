@@ -51,7 +51,8 @@ function renderIssueDetail(issueId) {
 
     const issue   = issues.find(i => i.id === issueId);
     if (!issue) {
-        document.getElementById('issue-detail').textContent = 'Issue not found.';
+        // FIXED ID: issue-detail -> issueDetails
+        document.getElementById('issueDetails').textContent = 'Issue not found.';
         return;
     }
 
@@ -67,7 +68,8 @@ function renderIssueDetail(issueId) {
         ? `${assignee.name} ${assignee.surname} <span class="text-muted small">(@${assignee.username})</span>`
         : 'Unassigned';
 
-    document.getElementById('issue-detail').innerHTML = `
+    // FIXED ID: issue-detail -> issueDetails
+    document.getElementById('issueDetails').innerHTML = `
         <h4 class="fw-bold">${escapeHTML(issue.summary)}</h4>
         <hr>
         <div class="row">
@@ -91,7 +93,8 @@ function renderIssueDetail(issueId) {
             </div>
         </div>`;
 
-    const editBtn = document.getElementById('edit-btn');
+    // FIXED ID: edit-btn -> editBtn
+    const editBtn = document.getElementById('editBtn');
     if (editBtn) editBtn.href = `create-issue.html?id=${issue.id}`;
 }
 
@@ -117,7 +120,8 @@ function initForm() {
         }
     }
 
-    const form = document.getElementById('form-issue');
+    // FIXED ID: form-issue -> issueForm
+    const form = document.getElementById('issueForm');
     form.addEventListener('submit', function (e) {
         e.preventDefault();
         if (!form.checkValidity()) {
@@ -150,13 +154,15 @@ function initDetail() {
     const params  = new URLSearchParams(window.location.search);
     const issueId = params.get('id');
     if (!issueId) {
-        document.getElementById('issue-detail').textContent = 'No issue selected.';
+        // FIXED ID: issue-detail -> issueDetails
+        document.getElementById('issueDetails').textContent = 'No issue selected.';
         return;
     }
     renderIssueDetail(issueId);
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    if (document.getElementById('form-issue'))    initForm();
-    if (document.getElementById('issue-detail'))  initDetail();
+    // FIXED IDs: form-issue -> issueForm AND issue-detail -> issueDetails
+    if (document.getElementById('issueForm'))    initForm();
+    if (document.getElementById('issueDetails'))  initDetail();
 });
